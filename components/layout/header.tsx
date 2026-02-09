@@ -57,7 +57,7 @@ export function Header() {
     <header className="bg-background border-b border-border sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/" className="text-2xl font-bold text-primary">
-          EazyBuy
+          E-Apparels
         </Link>
 
         {/* Desktop Navigation */}

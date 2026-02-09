@@ -34,47 +34,22 @@ interface PaymentMethod {
   cardholderName?: string
 }
 
-const STORAGE_KEY = "eazybuy_payment_methods"
-
 export default function PaymentPage() {
   const { user, isAuthenticated, isLoading } = useAuth()
   const router = useRouter()
   const { toast } = useToast()
-
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>(() => {
-    console.log("[v0] Initializing payment methods state...")
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      console.log("[v0] localStorage raw value:", stored)
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored)
-          console.log("[v0] Successfully loaded payment methods from localStorage:", parsed)
-          return parsed
-        } catch (e) {
-          console.error("[v0] Failed to parse stored payment methods:", e)
-        }
-      } else {
-        console.log("[v0] No payment methods found in localStorage, using defaults")
-      }
-    } else {
-      console.log("[v0] Window is undefined, cannot access localStorage")
-    }
-    const defaultMethods = [
-      {
-        id: "1",
-        type: "card" as const,
-        last4: "4242",
-        brand: "Visa",
-        expiryMonth: 12,
-        expiryYear: 2025,
-        isDefault: true,
-        cardholderName: "John Doe",
-      },
-    ]
-    console.log("[v0] Returning default payment methods:", defaultMethods)
-    return defaultMethods
-  })
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([
+    {
+      id: "1",
+      type: "card",
+      last4: "4242",
+      brand: "Visa",
+      expiryMonth: 12,
+      expiryYear: 2025,
+      isDefault: true,
+      cardholderName: "John Doe",
+    },
+  ])
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
@@ -258,6 +233,7 @@ export default function PaymentPage() {
 
     if (selectedPaymentMethod) {
       console.log("[v0] Updating existing payment method")
+      // Edit existing payment method
       setPaymentMethods((prev) =>
         prev.map((method) =>
           method.id === selectedPaymentMethod.id
@@ -278,6 +254,7 @@ export default function PaymentPage() {
       })
     } else {
       console.log("[v0] Adding new payment method")
+      // Add new payment method
       const newMethod: PaymentMethod = {
         id: Date.now().toString(),
         type: "card",
@@ -288,7 +265,6 @@ export default function PaymentPage() {
         isDefault: paymentMethods.length === 0,
         cardholderName: formData.cardholderName.trim(),
       }
-      console.log("[v0] New payment method created:", newMethod)
       setPaymentMethods((prev) => [...prev, newMethod])
       setIsAddModalOpen(false)
       toast({
@@ -341,18 +317,6 @@ export default function PaymentPage() {
       router.push("/auth")
     }
   }, [isAuthenticated, user, isLoading, router])
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      console.log("[v0] Saving payment methods to localStorage, count:", paymentMethods.length)
-      console.log("[v0] Payment methods data:", JSON.stringify(paymentMethods))
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(paymentMethods))
-      console.log("[v0] Payment methods saved successfully")
-      // Verify the save
-      const verification = localStorage.getItem(STORAGE_KEY)
-      console.log("[v0] Verification - localStorage now contains:", verification)
-    }
-  }, [paymentMethods])
 
   if (isLoading) {
     return (

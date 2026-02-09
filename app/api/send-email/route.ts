@@ -1,15 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server"
-import {
-  sendPasswordResetEmail,
-  sendVerificationEmail,
-  sendPaymentConfirmationEmail,
-  sendReturnRequestEmail,
-} from "@/lib/email-service"
+import { sendPasswordResetEmail, sendVerificationEmail } from "@/lib/email-service"
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { type, email, userName, token } = body
+    const { type, email, userName, token } = await request.json()
 
     console.log("[v0] Email API called with:", { type, email, userName })
 
@@ -18,12 +12,6 @@ export async function POST(request: NextRequest) {
       result = await sendPasswordResetEmail(email, userName, token)
     } else if (type === "verification") {
       result = await sendVerificationEmail(email, userName, token)
-    } else if (type === "payment-confirmation") {
-      const { orderDetails } = body
-      result = await sendPaymentConfirmationEmail(email, orderDetails)
-    } else if (type === "return-request") {
-      const { returnDetails } = body
-      result = await sendReturnRequestEmail(email, returnDetails)
     } else {
       return NextResponse.json({ success: false, error: "Invalid email type" }, { status: 400 })
     }

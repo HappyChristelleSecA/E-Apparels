@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -17,19 +17,6 @@ import type { DiscountApplication } from "@/lib/discounts"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 import { ShippingMethodSelector } from "@/components/cart/shipping-method-selector"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-
-interface PaymentMethod {
-  id: string
-  type: "card"
-  last4: string
-  brand: string
-  expiryMonth: number
-  expiryYear: number
-  isDefault: boolean
-  cardholderName: string
-}
 
 interface PaymentModalProps {
   isOpen: boolean
@@ -39,8 +26,6 @@ interface PaymentModalProps {
   selectedShippingMethodId?: string
   onShippingMethodChange?: (methodId: string) => void
 }
-
-const STORAGE_KEY = "eazybuy_payment_methods"
 
 export function PaymentModal({
   isOpen,
@@ -60,11 +45,6 @@ export function PaymentModal({
     null,
   )
 
-  const [savedPaymentMethods, setSavedPaymentMethods] = useState<PaymentMethod[]>([])
-  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string | null>(null)
-  const [paymentMode, setPaymentMode] = useState<"saved" | "new">("new")
-  const [saveNewCard, setSaveNewCard] = useState(false)
-
   const [paymentData, setPaymentData] = useState({
     cardNumber: "",
     expiryDate: "",
@@ -74,74 +54,6 @@ export function PaymentModal({
     city: "",
     zipCode: "",
   })
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) {
-        try {
-          const methods = JSON.parse(stored) as PaymentMethod[]
-          setSavedPaymentMethods(methods)
-
-          // Auto-select default payment method if available
-          const defaultMethod = methods.find((m) => m.isDefault)
-          if (defaultMethod) {
-            setSelectedPaymentMethodId(defaultMethod.id)
-            setPaymentMode("saved")
-            autoFillPaymentData(defaultMethod)
-          } else if (methods.length > 0) {
-            setSelectedPaymentMethodId(methods[0].id)
-            setPaymentMode("saved")
-            autoFillPaymentData(methods[0])
-          } else {
-            setPaymentMode("new")
-          }
-        } catch (e) {
-          console.error("[v0] Failed to load payment methods:", e)
-          setPaymentMode("new")
-        }
-      } else {
-        setPaymentMode("new")
-      }
-    }
-  }, [])
-
-  const autoFillPaymentData = (method: PaymentMethod) => {
-    setPaymentData({
-      cardNumber: `•••• •••• •••• ${method.last4}`,
-      expiryDate: `${method.expiryMonth.toString().padStart(2, "0")}/${method.expiryYear.toString().slice(-2)}`,
-      cvv: "•••",
-      cardholderName: method.cardholderName,
-      billingAddress: "",
-      city: "",
-      zipCode: "",
-    })
-  }
-
-  const handlePaymentMethodSelect = (value: string) => {
-    if (value === "new") {
-      setPaymentMode("new")
-      setSelectedPaymentMethodId(null)
-      // Clear form for new card entry
-      setPaymentData({
-        cardNumber: "",
-        expiryDate: "",
-        cvv: "",
-        cardholderName: "",
-        billingAddress: "",
-        city: "",
-        zipCode: "",
-      })
-    } else {
-      setPaymentMode("saved")
-      setSelectedPaymentMethodId(value)
-      // Auto-fill form with selected card
-      const selectedMethod = savedPaymentMethods.find((m) => m.id === value)
-      if (selectedMethod) {
-        autoFillPaymentData(selectedMethod)
-      }
-    }
-  }
 
   const handleInputChange = (field: string, value: string) => {
     setPaymentData((prev) => ({ ...prev, [field]: value }))
@@ -202,23 +114,6 @@ export function PaymentModal({
 
   const isCartEmpty = items.length === 0 || subtotal === 0
 
-  const savePaymentMethod = (cardData: typeof paymentData) => {
-    const newMethod: PaymentMethod = {
-      id: Date.now().toString(),
-      type: "card",
-      last4: cardData.cardNumber.replace(/\s/g, "").slice(-4),
-      brand: "Visa", // In a real app, detect card brand from number
-      expiryMonth: Number.parseInt(cardData.expiryDate.split("/")[0]),
-      expiryYear: 2000 + Number.parseInt(cardData.expiryDate.split("/")[1]),
-      isDefault: savedPaymentMethods.length === 0,
-      cardholderName: cardData.cardholderName,
-    }
-
-    const updatedMethods = [...savedPaymentMethods, newMethod]
-    setSavedPaymentMethods(updatedMethods)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedMethods))
-  }
-
   const processPayment = async () => {
     if (isCartEmpty || !user) {
       return
@@ -235,10 +130,6 @@ export function PaymentModal({
     console.log("[v0] Items before storing:", items)
     setPurchasedItems([...items])
     console.log("[v0] Purchased items set:", [...items])
-
-    if (paymentMode === "new" && saveNewCard && paymentData.cardNumber && paymentData.cardholderName) {
-      savePaymentMethod(paymentData)
-    }
 
     await new Promise((resolve) => setTimeout(resolve, 2000))
 
@@ -281,49 +172,6 @@ export function PaymentModal({
       })
 
       console.log("[v0] Order created:", newOrder.id)
-
-      if (user.email) {
-        console.log("[v0] Sending payment confirmation email to:", user.email)
-
-        const baseUrl =
-          typeof window !== "undefined"
-            ? window.location.origin
-            : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-
-        try {
-          const emailResponse = await fetch("/api/send-email", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              type: "payment-confirmation",
-              email: user.email,
-              orderDetails: {
-                orderId: newOrder.id,
-                userName: user.name || "Customer",
-                total: `$${total.toFixed(2)}`,
-                items: orderItems.map((item) => ({
-                  name: item.product.name,
-                  quantity: item.quantity,
-                  price: `$${item.price.toFixed(2)}`,
-                })),
-                shippingAddress: `${newOrder.shippingAddress.name}, ${newOrder.shippingAddress.street}, ${newOrder.shippingAddress.city}, ${newOrder.shippingAddress.state} ${newOrder.shippingAddress.zipCode}`,
-                trackingUrl: `${baseUrl}/dashboard/orders/${newOrder.id}`,
-              },
-            }),
-          })
-
-          const emailResult = await emailResponse.json()
-          if (emailResult.success) {
-            console.log("[v0] Payment confirmation email sent successfully")
-          } else {
-            console.error("[v0] Failed to send payment confirmation email:", emailResult.error)
-          }
-        } catch (emailError) {
-          console.error("[v0] Error sending payment confirmation email:", emailError)
-        }
-      }
     } catch (error) {
       console.error("[v0] Error creating order:", error)
     }
@@ -341,16 +189,6 @@ export function PaymentModal({
     const receiptTax = calculateTax(receiptSubtotal - totalDiscountAmount)
     const receiptTotal = total
 
-    let cardLast4 = "****"
-    if (paymentMode === "saved" && selectedPaymentMethodId) {
-      const selectedMethod = savedPaymentMethods.find((m) => m.id === selectedPaymentMethodId)
-      if (selectedMethod) {
-        cardLast4 = selectedMethod.last4
-      }
-    } else if (paymentData.cardNumber) {
-      cardLast4 = paymentData.cardNumber.slice(-4)
-    }
-
     const receiptData = {
       receiptNumber,
       date: new Date().toLocaleDateString(),
@@ -359,12 +197,12 @@ export function PaymentModal({
       discounts: totalDiscountAmount.toFixed(2),
       tax: receiptTax.toFixed(2),
       total: receiptTotal.toFixed(2),
-      paymentMethod: `**** **** **** ${cardLast4}`,
+      paymentMethod: `**** **** **** ${paymentData.cardNumber.slice(-4)}`,
       status: "PAID",
     }
 
     let receiptText = `
-EAZYBUY RECEIPT
+E-APPARELS RECEIPT
 ================
 Receipt #: ${receiptData.receiptNumber}
 Date: ${receiptData.date}
@@ -397,7 +235,7 @@ Total: $${receiptData.total}
 Payment Method: ${receiptData.paymentMethod}
 Status: ${receiptData.status}
 
-Thank you for shopping with EazyBuy!
+Thank you for shopping with E-Apparels!
 ================
     `
 
@@ -405,7 +243,7 @@ Thank you for shopping with EazyBuy!
     const url = window.URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
-    a.download = `EazyBuy-Receipt-${receiptNumber}.txt`
+    a.download = `E-Apparels-Receipt-${receiptNumber}.txt`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
@@ -417,16 +255,6 @@ Thank you for shopping with EazyBuy!
     const receiptSubtotal = itemsForReceipt.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
     const receiptTax = calculateTax(receiptSubtotal - totalDiscountAmount)
     const receiptTotal = total
-
-    let cardLast4 = "****"
-    if (paymentMode === "saved" && selectedPaymentMethodId) {
-      const selectedMethod = savedPaymentMethods.find((m) => m.id === selectedPaymentMethodId)
-      if (selectedMethod) {
-        cardLast4 = selectedMethod.last4
-      }
-    } else if (paymentData.cardNumber) {
-      cardLast4 = paymentData.cardNumber.slice(-4)
-    }
 
     const printWindow = window.open("", "_blank")
     if (!printWindow) return
@@ -454,7 +282,7 @@ Thank you for shopping with EazyBuy!
       <!DOCTYPE html>
       <html>
         <head>
-          <title>EazyBuy Receipt - ${receiptNumber}</title>
+          <title>E-Apparels Receipt - ${receiptNumber}</title>
           <style>
             body { font-family: monospace; max-width: 400px; margin: 0 auto; padding: 20px; }
             .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
@@ -467,7 +295,7 @@ Thank you for shopping with EazyBuy!
         </head>
         <body>
           <div class="header">
-            <h2>EAZYBUY RECEIPT</h2>
+            <h2>E-APPARELS RECEIPT</h2>
             <p>Receipt #: ${receiptNumber}</p>
             <p>${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</p>
           </div>
@@ -514,9 +342,9 @@ Thank you for shopping with EazyBuy!
           </div>
           
           <div class="footer">
-            <p>Payment Method: **** **** **** ${cardLast4}</p>
+            <p>Payment Method: **** **** **** ${paymentData.cardNumber.slice(-4)}</p>
             <p>Status: PAID</p>
-            <p>Thank you for shopping with EazyBuy!</p>
+            <p>Thank you for shopping with E-Apparels!</p>
           </div>
         </body>
       </html>
@@ -541,7 +369,6 @@ Thank you for shopping with EazyBuy!
       zipCode: "",
     })
     setReceiptNumber("")
-    setSaveNewCard(false)
     onClose()
   }
 
@@ -556,14 +383,6 @@ Thank you for shopping with EazyBuy!
   console.log("[v0] Current step:", step)
   console.log("[v0] Purchased items length:", purchasedItems.length)
   console.log("[v0] Display calculations:", { displaySubtotal, displayTax, displayTotal, displayShippingCost })
-
-  const isPaymentValid = () => {
-    if (paymentMode === "saved") {
-      return selectedPaymentMethodId !== null
-    } else {
-      return paymentData.cardNumber && paymentData.cardholderName
-    }
-  }
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
@@ -766,45 +585,6 @@ Thank you for shopping with EazyBuy!
                     </CardContent>
                   </Card>
 
-                  <Card>
-                    <CardContent className="p-4">
-                      <div className="space-y-3">
-                        <Label htmlFor="payment-method-select">Select Payment Method</Label>
-                        <Select
-                          value={paymentMode === "saved" ? selectedPaymentMethodId || "new" : "new"}
-                          onValueChange={handlePaymentMethodSelect}
-                        >
-                          <SelectTrigger id="payment-method-select" className="w-full">
-                            <SelectValue placeholder="Choose a payment method" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {savedPaymentMethods.map((method) => (
-                              <SelectItem key={method.id} value={method.id}>
-                                <div className="flex items-center gap-2">
-                                  <FaCreditCard className="h-4 w-4 text-muted-foreground" />
-                                  <span>
-                                    {method.brand} •••• {method.last4} - {method.cardholderName}
-                                  </span>
-                                  {method.isDefault && (
-                                    <Badge variant="secondary" className="text-xs ml-2">
-                                      Default
-                                    </Badge>
-                                  )}
-                                </div>
-                              </SelectItem>
-                            ))}
-                            <SelectItem value="new">
-                              <div className="flex items-center gap-2">
-                                <FaCreditCard className="h-4 w-4 text-muted-foreground" />
-                                <span>Use a different card</span>
-                              </div>
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </CardContent>
-                  </Card>
-
                   <div className="space-y-4">
                     <div>
                       <Label htmlFor="cardNumber">Card Number</Label>
@@ -814,8 +594,6 @@ Thank you for shopping with EazyBuy!
                         value={paymentData.cardNumber}
                         onChange={(e) => handleInputChange("cardNumber", formatCardNumber(e.target.value))}
                         maxLength={19}
-                        disabled={paymentMode === "saved"}
-                        className={paymentMode === "saved" ? "bg-muted" : ""}
                       />
                     </div>
 
@@ -828,8 +606,6 @@ Thank you for shopping with EazyBuy!
                           value={paymentData.expiryDate}
                           onChange={(e) => handleInputChange("expiryDate", formatExpiryDate(e.target.value))}
                           maxLength={5}
-                          disabled={paymentMode === "saved"}
-                          className={paymentMode === "saved" ? "bg-muted" : ""}
                         />
                       </div>
                       <div>
@@ -840,8 +616,6 @@ Thank you for shopping with EazyBuy!
                           value={paymentData.cvv}
                           onChange={(e) => handleInputChange("cvv", e.target.value.replace(/\D/g, "").slice(0, 4))}
                           maxLength={4}
-                          disabled={paymentMode === "saved"}
-                          className={paymentMode === "saved" ? "bg-muted" : ""}
                         />
                       </div>
                     </div>
@@ -853,8 +627,6 @@ Thank you for shopping with EazyBuy!
                         placeholder="John Doe"
                         value={paymentData.cardholderName}
                         onChange={(e) => handleInputChange("cardholderName", e.target.value)}
-                        disabled={paymentMode === "saved"}
-                        className={paymentMode === "saved" ? "bg-muted" : ""}
                       />
                     </div>
 
@@ -891,19 +663,6 @@ Thank you for shopping with EazyBuy!
                         />
                       </div>
                     </div>
-
-                    {paymentMode === "new" && (
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          id="save-card"
-                          checked={saveNewCard}
-                          onCheckedChange={(checked) => setSaveNewCard(checked as boolean)}
-                        />
-                        <Label htmlFor="save-card" className="text-sm cursor-pointer">
-                          Save this card for future purchases
-                        </Label>
-                      </div>
-                    )}
                   </div>
 
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -917,10 +676,16 @@ Thank you for shopping with EazyBuy!
                     </Button>
                     <Button
                       onClick={processPayment}
-                      disabled={isProcessing || !isPaymentValid() || isCartEmpty || stockValidationError !== null}
+                      disabled={
+                        isProcessing ||
+                        !paymentData.cardNumber ||
+                        !paymentData.cardholderName ||
+                        isCartEmpty ||
+                        stockValidationError !== null
+                      }
                       className="flex-1"
                     >
-                      {isProcessing ? "Processing..." : "Confirm Payment"}
+                      {isProcessing ? "Processing..." : "Pay Now"}
                     </Button>
                   </div>
                 </>

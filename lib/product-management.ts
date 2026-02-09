@@ -4,7 +4,7 @@ import { type Product, products as defaultProducts, refreshProductsCache } from 
 let memoryProducts: Product[] = [...defaultProducts]
 let isInitialized = false
 
-const IMAGES_STORAGE_KEY = "eazybuy_product_images"
+const IMAGES_STORAGE_KEY = "eapparels_product_images"
 
 const saveImagesToStorage = (images: Record<string, { image?: string; images?: string[] }>): void => {
   if (typeof window === "undefined") return

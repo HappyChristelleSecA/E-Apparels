@@ -1,28 +1,28 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Space_Grotesk, DM_Sans } from "next/font/google"
+import { Playfair_Display, Inter } from "next/font/google"
 import { CartProvider } from "@/hooks/use-cart"
 import { WishlistProvider } from "@/hooks/use-wishlist"
 import { Footer } from "@/components/layout/footer"
 import { ErrorBoundary } from "@/components/error-boundary"
 import "./globals.css"
 
-const spaceGrotesk = Space_Grotesk({
+const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-space-grotesk",
+  variable: "--font-playfair-display",
 })
 
-const dmSans = DM_Sans({
+const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-dm-sans",
+  variable: "--font-inter",
 })
 
 export const metadata: Metadata = {
-  title: "EazyBuy - Modern E-Commerce",
-  description: "Your trusted online shopping destination",
-    generator: 'v0.app'
+  title: "E-Apparels - Premium Fashion & Clothing",
+  description: "Your trusted destination for premium fashion, clothing, and accessories",
+  generator: "v0.app",
 }
 
 export default function RootLayout({
@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${dmSans.variable} antialiased`}>
+    <html lang="en" className={`${playfairDisplay.variable} ${inter.variable} antialiased`}>
       <body className="font-sans">
         <ErrorBoundary>
           <CartProvider>

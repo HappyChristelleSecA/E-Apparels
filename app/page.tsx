@@ -8,6 +8,7 @@ import { ProductCard } from "@/components/products/product-card"
 import { SearchAutocomplete } from "@/components/products/search-autocomplete"
 import { getFeaturedProducts, searchProducts } from "@/lib/products"
 import Link from "next/link"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 
 import { FaShoppingBag, FaShieldAlt, FaTruck, FaStar, FaArrowRight } from "react-icons/fa"
@@ -35,15 +36,24 @@ export default function HomePage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary/5 to-accent/5 py-20">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
-            Welcome to <span className="text-primary">EazyBuy</span>
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/hero-fashion.jpg"
+            alt="Premium fashion collection"
+            fill
+            className="object-cover brightness-[0.3]"
+            priority
+          />
+        </div>
+        <div className="relative z-10 container mx-auto px-4 py-24 md:py-32 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 text-balance">
+            Elevate Your Style with <span className="text-accent">E-Apparels</span>
           </h1>
 
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Your trusted online shopping destination. Discover amazing products with unbeatable prices and exceptional
-            service.
+          <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
+            Your premium destination for curated fashion. Discover trending clothing, accessories, and footwear from
+            top brands at unbeatable prices.
           </p>
 
           <div className="mb-8 max-w-md mx-auto">
@@ -64,7 +74,7 @@ export default function HomePage() {
                 Shop Now
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild>
+            <Button size="lg" variant="outline" asChild className="border-white text-white hover:bg-white/10 bg-transparent">
               <Link href="/about">Learn More</Link>
             </Button>
           </div>
@@ -75,8 +85,8 @@ export default function HomePage() {
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Featured Products</h2>
-            <p className="text-muted-foreground text-lg mb-8">Check out our most popular items</p>
+            <h2 className="text-3xl font-bold mb-4">Trending Now</h2>
+            <p className="text-muted-foreground text-lg mb-8">Our most popular picks this season</p>
           </div>
 
           {searchQuery.trim() && filteredProducts.length === 0 ? (
@@ -122,31 +132,31 @@ export default function HomePage() {
       {/* Features Section */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose EazyBuy?</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose E-Apparels?</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <Card>
               <CardContent className="p-6 text-center">
                 <FaShieldAlt className="h-12 w-12 text-primary mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Secure Shopping</h3>
+                <h3 className="text-xl font-semibold mb-2">Secure Checkout</h3>
                 <p className="text-muted-foreground">
-                  Your data and payments are protected with industry-leading security measures.
+                  Your payments and personal data are protected with industry-leading encryption.
                 </p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6 text-center">
                 <FaTruck className="h-12 w-12 text-primary mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Fast Delivery</h3>
+                <h3 className="text-xl font-semibold mb-2">Express Shipping</h3>
                 <p className="text-muted-foreground">
-                  Get your orders delivered quickly with our reliable shipping partners.
+                  Standard and express delivery options to get your fashion picks fast.
                 </p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6 text-center">
                 <FaStar className="h-12 w-12 text-primary mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Quality Products</h3>
-                <p className="text-muted-foreground">Carefully curated products from trusted brands and sellers.</p>
+                <h3 className="text-xl font-semibold mb-2">Premium Brands</h3>
+                <p className="text-muted-foreground">Handpicked fashion from trusted designers and premium labels.</p>
               </CardContent>
             </Card>
           </div>
@@ -156,9 +166,9 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="bg-primary text-primary-foreground py-20">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Start Shopping?</h2>
+          <h2 className="text-3xl font-bold mb-4">Ready to Refresh Your Wardrobe?</h2>
           <p className="text-xl mb-8 opacity-90">
-            Join thousands of satisfied customers and discover your next favorite product.
+            Join thousands of fashion-forward shoppers and discover your next favorite look.
           </p>
           <Button size="lg" variant="secondary" asChild>
             <Link href="/auth">Get Started Today</Link>

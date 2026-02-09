@@ -10,33 +10,33 @@ export default function AboutPage() {
   const values = [
     {
       icon: Target,
-      title: "Quality First",
-      description: "We carefully curate every product to ensure the highest quality standards for our customers.",
+      title: "Curated Quality",
+      description: "Every garment and accessory is handpicked to meet our premium quality standards.",
     },
     {
       icon: Users,
-      title: "Customer Focused",
-      description: "Our customers are at the heart of everything we do. Your satisfaction is our top priority.",
+      title: "Style For All",
+      description: "Fashion for men, women, and children. We believe everyone deserves to look and feel great.",
     },
     {
       icon: Award,
-      title: "Excellence",
-      description: "We strive for excellence in every aspect of our business, from products to customer service.",
+      title: "Trending Designs",
+      description: "Stay ahead with the latest fashion trends curated by our expert styling team.",
     },
     {
       icon: Heart,
-      title: "Sustainability",
-      description: "We're committed to sustainable practices and supporting eco-friendly products.",
+      title: "Sustainable Fashion",
+      description: "Committed to eco-friendly materials and ethical manufacturing practices.",
     },
   ]
 
   const features = [
     "Free shipping on orders over $50",
-    "30-day hassle-free returns",
-    "24/7 customer support",
+    "30-day hassle-free returns and exchanges",
+    "24/7 fashion customer support",
     "Secure payment processing",
-    "Fast and reliable delivery",
-    "Quality guarantee on all products",
+    "Standard and express delivery options",
+    "Quality guarantee on all garments",
   ]
 
   return (
@@ -53,11 +53,11 @@ export default function AboutPage() {
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            About <span className="text-primary">EazyBuy</span>
+            About <span className="text-primary">E-Apparels</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            We're more than just an e-commerce platform. We're your trusted partner in discovering amazing products that
-            enhance your lifestyle, backed by exceptional service and unbeatable value.
+            We are more than just an online store. We are your trusted fashion partner, curating the finest apparel,
+            accessories, and footwear to help you express your unique style with confidence.
           </p>
         </div>
 
@@ -68,12 +68,12 @@ export default function AboutPage() {
               <div>
                 <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
                 <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                  To make online shopping easy, enjoyable, and accessible for everyone. We believe that great products
-                  should be available to all, backed by outstanding customer service and competitive prices.
+                  To make fashion accessible, enjoyable, and empowering for everyone. We believe that great style
+                  should not come at a premium, and everyone deserves access to quality apparel.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
-                  Since our founding, we've been committed to building lasting relationships with our customers by
-                  consistently delivering on our promises of quality, value, and service.
+                  Since our founding, we have been committed to curating collections that blend timeless elegance with
+                  contemporary trends, all backed by exceptional customer service.
                 </p>
               </div>
               <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-lg p-8 text-center">
@@ -107,7 +107,7 @@ export default function AboutPage() {
         {/* Features Section */}
         <div className="grid lg:grid-cols-2 gap-12 mb-16">
           <div>
-            <h2 className="text-3xl font-bold mb-6">Why Choose EazyBuy?</h2>
+            <h2 className="text-3xl font-bold mb-6">Why Choose E-Apparels?</h2>
             <div className="space-y-4">
               {features.map((feature, index) => (
                 <div key={index} className="flex items-center space-x-3">
@@ -144,7 +144,7 @@ export default function AboutPage() {
           <CardContent className="p-8 md:p-12 text-center">
             <h2 className="text-3xl font-bold mb-6">Our Team</h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-8">
-              We're a passionate team of e-commerce professionals, designers, and customer service experts dedicated to
+              We are a passionate team of fashion enthusiasts, designers, and customer service experts dedicated to
               making your shopping experience exceptional.
             </p>
             <div className="flex flex-wrap justify-center gap-4">

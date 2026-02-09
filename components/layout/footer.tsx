@@ -8,9 +8,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">EazyBuy</h3>
+            <h3 className="text-lg font-semibold">E-Apparels</h3>
             <p className="text-sm text-muted-foreground">
-              Your trusted e-commerce platform for quality products at great prices.
+              Your premium fashion destination for curated clothing, accessories, and footwear.
             </p>
             <div className="flex space-x-4">
               <Link
@@ -108,7 +108,7 @@ export function Footer() {
               </div>
               <div className="flex items-center space-x-2">
                 <FaEnvelope className="h-4 w-4 text-muted-foreground" />
-                <span className="text-muted-foreground">support@eazybuy.com</span>
+                <span className="text-muted-foreground">support@e-apparels.com</span>
               </div>
             </div>
           </div>
@@ -116,7 +116,7 @@ export function Footer() {
 
         <div className="border-t mt-8 pt-8 text-center text-sm text-muted-foreground">
           <p>
-            &copy; 2024 EazyBuy. All rights reserved. |
+            &copy; 2024 E-Apparels. All rights reserved. |
             <Link href="/privacy" className="hover:text-primary ml-1">
               Privacy Policy
             </Link>{" "}

@@ -38,8 +38,8 @@ const getEmailConfig = (): EmailConfig => {
       return {
         provider: "resend",
         apiKey: resendApiKey,
-        fromEmail: process.env.FROM_EMAIL || "noreply@eazybuy.com",
-        fromName: process.env.FROM_NAME || "EazyBuy",
+        fromEmail: process.env.FROM_EMAIL || "noreply@e-apparels.com",
+        fromName: process.env.FROM_NAME || "E-Apparels",
       }
     }
 
@@ -47,8 +47,8 @@ const getEmailConfig = (): EmailConfig => {
       return {
         provider: "sendgrid",
         apiKey: sendgridApiKey,
-        fromEmail: process.env.FROM_EMAIL || "noreply@eazybuy.com",
-        fromName: process.env.FROM_NAME || "EazyBuy",
+        fromEmail: process.env.FROM_EMAIL || "noreply@e-apparels.com",
+        fromName: process.env.FROM_NAME || "E-Apparels",
       }
     }
 
@@ -59,8 +59,8 @@ const getEmailConfig = (): EmailConfig => {
         smtpPort: Number.parseInt(process.env.SMTP_PORT || "587"),
         smtpUser,
         smtpPass,
-        fromEmail: process.env.FROM_EMAIL || "noreply@eazybuy.com",
-        fromName: process.env.FROM_NAME || "EazyBuy",
+        fromEmail: process.env.FROM_EMAIL || "noreply@e-apparels.com",
+        fromName: process.env.FROM_NAME || "E-Apparels",
       }
     }
   }
@@ -69,24 +69,24 @@ const getEmailConfig = (): EmailConfig => {
   // Fallback to demo mode
   return {
     provider: "demo",
-    fromEmail: "noreply@eazybuy.com",
-    fromName: "EazyBuy",
+    fromEmail: "noreply@e-apparels.com",
+    fromName: "E-Apparels",
   }
 }
 
 // Email templates
 export const emailTemplates = {
   emailVerification: (verificationUrl: string, userName: string): EmailTemplate => ({
-    subject: "Verify Your Email Address - EazyBuy",
+    subject: "Verify Your Email Address - E-Apparels",
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center;">
-          <h1 style="color: white; margin: 0; font-size: 28px;">Welcome to EazyBuy!</h1>
+          <h1 style="color: white; margin: 0; font-size: 28px;">Welcome to E-Apparels!</h1>
         </div>
         <div style="padding: 40px 20px; background: #f8f9fa;">
           <h2 style="color: #333; margin-bottom: 20px;">Hi ${userName},</h2>
           <p style="color: #666; font-size: 16px; line-height: 1.6;">
-            Thank you for signing up for EazyBuy! To complete your registration and start shopping, 
+            Thank you for signing up for E-Apparels! To complete your registration and start shopping, 
             please verify your email address by clicking the button below.
           </p>
           <div style="text-align: center; margin: 30px 0;">
@@ -105,17 +105,17 @@ export const emailTemplates = {
           </p>
         </div>
         <div style="background: #333; color: #999; padding: 20px; text-align: center; font-size: 12px;">
-          <p>© 2025 EazyBuy. All rights reserved.</p>
+          <p>© 2025 E-Apparels. All rights reserved.</p>
           <p>If you didn't create an account, please ignore this email.</p>
         </div>
       </div>
     `,
     text: `
-      Welcome to EazyBuy!
+      Welcome to E-Apparels!
       
       Hi ${userName},
       
-      Thank you for signing up for EazyBuy! To complete your registration and start shopping, 
+      Thank you for signing up for E-Apparels! To complete your registration and start shopping, 
       please verify your email address by visiting this link:
       
       ${verificationUrl}
@@ -124,12 +124,12 @@ export const emailTemplates = {
       
       If you didn't create an account, please ignore this email.
       
-      © 2025 EazyBuy. All rights reserved.
+      © 2025 E-Apparels. All rights reserved.
     `,
   }),
 
   passwordReset: (resetUrl: string, userName: string): EmailTemplate => ({
-    subject: "Reset Your Password - EazyBuy",
+    subject: "Reset Your Password - E-Apparels",
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center;">
@@ -138,7 +138,7 @@ export const emailTemplates = {
         <div style="padding: 40px 20px; background: #f8f9fa;">
           <h2 style="color: #333; margin-bottom: 20px;">Hi ${userName},</h2>
           <p style="color: #666; font-size: 16px; line-height: 1.6;">
-            We received a request to reset your password for your EazyBuy account. 
+            We received a request to reset your password for your E-Apparels account. 
             Click the button below to create a new password.
           </p>
           <div style="text-align: center; margin: 30px 0;">
@@ -160,16 +160,16 @@ export const emailTemplates = {
           </p>
         </div>
         <div style="background: #333; color: #999; padding: 20px; text-align: center; font-size: 12px;">
-          <p>© 2025 EazyBuy. All rights reserved.</p>
+          <p>© 2025 E-Apparels. All rights reserved.</p>
         </div>
       </div>
     `,
     text: `
-      Password Reset - EazyBuy
+      Password Reset - E-Apparels
       
       Hi ${userName},
       
-      We received a request to reset your password for your EazyBuy account. 
+      We received a request to reset your password for your E-Apparels account. 
       Visit this link to create a new password:
       
       ${resetUrl}
@@ -178,191 +178,7 @@ export const emailTemplates = {
       
       If you didn't request a password reset, please ignore this email. Your password will remain unchanged.
       
-      © 2025 EazyBuy. All rights reserved.
-    `,
-  }),
-
-  paymentConfirmation: (orderDetails: {
-    orderId: string
-    userName: string
-    total: string
-    items: Array<{ name: string; quantity: number; price: string }>
-    shippingAddress: string
-    trackingUrl?: string
-  }): EmailTemplate => ({
-    subject: `Order Confirmation #${orderDetails.orderId} - EazyBuy`,
-    html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center;">
-          <h1 style="color: white; margin: 0; font-size: 28px;">Order Confirmed!</h1>
-        </div>
-        <div style="padding: 40px 20px; background: #f8f9fa;">
-          <h2 style="color: #333; margin-bottom: 20px;">Hi ${orderDetails.userName},</h2>
-          <p style="color: #666; font-size: 16px; line-height: 1.6;">
-            Thank you for your order! Your payment has been processed successfully.
-          </p>
-          <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <h3 style="color: #333; margin-top: 0;">Order #${orderDetails.orderId}</h3>
-            <div style="border-top: 1px solid #e0e0e0; padding-top: 15px;">
-              ${orderDetails.items
-                .map(
-                  (item) => `
-                <div style="margin-bottom: 10px;">
-                  <strong>${item.name}</strong><br>
-                  <span style="color: #666;">Quantity: ${item.quantity} × ${item.price}</span>
-                </div>
-              `,
-                )
-                .join("")}
-            </div>
-            <div style="border-top: 2px solid #e0e0e0; padding-top: 15px; margin-top: 15px;">
-              <strong style="font-size: 18px;">Total: ${orderDetails.total}</strong>
-            </div>
-          </div>
-          <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <h3 style="color: #333; margin-top: 0;">Shipping Address</h3>
-            <p style="color: #666; margin: 0;">${orderDetails.shippingAddress}</p>
-          </div>
-          ${
-            orderDetails.trackingUrl
-              ? `
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${orderDetails.trackingUrl}" 
-               style="background: #667eea; color: white; padding: 15px 30px; text-decoration: none; 
-                      border-radius: 5px; font-weight: bold; display: inline-block;">
-              Track Your Order
-            </a>
-          </div>
-          `
-              : ""
-          }
-          <p style="color: #666; font-size: 14px; margin-top: 30px;">
-            We'll send you another email when your order ships. If you have any questions, please contact our support team.
-          </p>
-        </div>
-        <div style="background: #333; color: #999; padding: 20px; text-align: center; font-size: 12px;">
-          <p>© 2025 EazyBuy. All rights reserved.</p>
-        </div>
-      </div>
-    `,
-    text: `
-      Order Confirmed! - EazyBuy
-      
-      Hi ${orderDetails.userName},
-      
-      Thank you for your order! Your payment has been processed successfully.
-      
-      Order #${orderDetails.orderId}
-      
-      Items:
-      ${orderDetails.items.map((item) => `- ${item.name} (Qty: ${item.quantity}) - ${item.price}`).join("\n")}
-      
-      Total: ${orderDetails.total}
-      
-      Shipping Address:
-      ${orderDetails.shippingAddress}
-      
-      ${orderDetails.trackingUrl ? `Track your order: ${orderDetails.trackingUrl}` : ""}
-      
-      We'll send you another email when your order ships. If you have any questions, please contact our support team.
-      
-      © 2025 EazyBuy. All rights reserved.
-    `,
-  }),
-
-  returnRequest: (returnDetails: {
-    orderId: string
-    userName: string
-    reason: string
-    items: Array<{ name: string; quantity: number }>
-    returnUrl?: string
-  }): EmailTemplate => ({
-    subject: `Return Request Received #${returnDetails.orderId} - EazyBuy`,
-    html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center;">
-          <h1 style="color: white; margin: 0; font-size: 28px;">Return Request Received</h1>
-        </div>
-        <div style="padding: 40px 20px; background: #f8f9fa;">
-          <h2 style="color: #333; margin-bottom: 20px;">Hi ${returnDetails.userName},</h2>
-          <p style="color: #666; font-size: 16px; line-height: 1.6;">
-            We've received your return request for order #${returnDetails.orderId}. Our team will review your request and get back to you within 24-48 hours.
-          </p>
-          <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <h3 style="color: #333; margin-top: 0;">Return Details</h3>
-            <p style="color: #666;"><strong>Order:</strong> #${returnDetails.orderId}</p>
-            <p style="color: #666;"><strong>Reason:</strong> ${returnDetails.reason}</p>
-            <div style="border-top: 1px solid #e0e0e0; padding-top: 15px; margin-top: 15px;">
-              <strong>Items:</strong>
-              ${returnDetails.items
-                .map(
-                  (item) => `
-                <div style="margin-top: 10px;">
-                  <span style="color: #666;">• ${item.name} (Qty: ${item.quantity})</span>
-                </div>
-              `,
-                )
-                .join("")}
-            </div>
-          </div>
-          ${
-            returnDetails.returnUrl
-              ? `
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${returnDetails.returnUrl}" 
-               style="background: #667eea; color: white; padding: 15px 30px; text-decoration: none; 
-                      border-radius: 5px; font-weight: bold; display: inline-block;">
-              View Return Status
-            </a>
-          </div>
-          `
-              : ""
-          }
-          <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0;">
-            <p style="color: #856404; margin: 0; font-size: 14px;">
-              <strong>Next Steps:</strong><br>
-              1. Our team will review your request<br>
-              2. You'll receive a return label via email<br>
-              3. Pack the items securely<br>
-              4. Ship using the provided label<br>
-              5. Refund will be processed once we receive the items
-            </p>
-          </div>
-          <p style="color: #666; font-size: 14px; margin-top: 30px;">
-            If you have any questions about your return, please contact our support team.
-          </p>
-        </div>
-        <div style="background: #333; color: #999; padding: 20px; text-align: center; font-size: 12px;">
-          <p>© 2025 EazyBuy. All rights reserved.</p>
-        </div>
-      </div>
-    `,
-    text: `
-      Return Request Received - EazyBuy
-      
-      Hi ${returnDetails.userName},
-      
-      We've received your return request for order #${returnDetails.orderId}. Our team will review your request and get back to you within 24-48 hours.
-      
-      Return Details:
-      Order: #${returnDetails.orderId}
-      Reason: ${returnDetails.reason}
-      
-      Items:
-      ${returnDetails.items.map((item) => `- ${item.name} (Qty: ${item.quantity})`).join("\n")}
-      
-      ${returnDetails.returnUrl ? `View return status: ${returnDetails.returnUrl}` : ""}
-      
-      Next Steps:
-      1. Our team will review your request
-      2. You'll receive a return label via email
-      3. Pack the items securely
-      4. Ship using the provided label
-      5. Refund will be processed once we receive the items
-      
-      If you have any questions about your return, please contact our support team.
-      
-      © 2025 EazyBuy. All rights reserved.
+      © 2025 E-Apparels. All rights reserved.
     `,
   }),
 }
@@ -510,34 +326,5 @@ export const sendPasswordResetEmail = async (
   const resetUrl = `${baseUrl}/reset-password?token=${resetToken}`
   const template = emailTemplates.passwordReset(resetUrl, userName)
 
-  return await sendEmail(email, template)
-}
-
-export const sendPaymentConfirmationEmail = async (
-  email: string,
-  orderDetails: {
-    orderId: string
-    userName: string
-    total: string
-    items: Array<{ name: string; quantity: number; price: string }>
-    shippingAddress: string
-    trackingUrl?: string
-  },
-): Promise<{ success: boolean; error?: string }> => {
-  const template = emailTemplates.paymentConfirmation(orderDetails)
-  return await sendEmail(email, template)
-}
-
-export const sendReturnRequestEmail = async (
-  email: string,
-  returnDetails: {
-    orderId: string
-    userName: string
-    reason: string
-    items: Array<{ name: string; quantity: number }>
-    returnUrl?: string
-  },
-): Promise<{ success: boolean; error?: string }> => {
-  const template = emailTemplates.returnRequest(returnDetails)
   return await sendEmail(email, template)
 }

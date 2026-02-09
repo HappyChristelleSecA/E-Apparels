@@ -143,48 +143,6 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
 
     if (success) {
       console.log("[v0] Return requested successfully, refreshing data")
-
-      if (user?.email) {
-        console.log("[v0] Sending return request email to:", user.email)
-
-        const baseUrl =
-          typeof window !== "undefined"
-            ? window.location.origin
-            : process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
-
-        try {
-          const emailResponse = await fetch("/api/send-email", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              type: "return-request",
-              email: user.email,
-              returnDetails: {
-                orderId: order.id,
-                userName: user.name || "Customer",
-                reason: returnReason,
-                items: order.items.map((item) => ({
-                  name: item.product.name,
-                  quantity: item.quantity,
-                })),
-                returnUrl: `${baseUrl}/dashboard/orders/${order.id}`,
-              },
-            }),
-          })
-
-          const emailResult = await emailResponse.json()
-          if (emailResult.success) {
-            console.log("[v0] Return request email sent successfully")
-          } else {
-            console.error("[v0] Failed to send return request email:", emailResult.error)
-          }
-        } catch (emailError) {
-          console.error("[v0] Error sending return request email:", emailError)
-        }
-      }
-
       setReturnDialogOpen(false)
       setReturnReason("")
       router.refresh()
@@ -221,7 +179,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
         </head>
         <body>
           <div class="header">
-            <div class="company-name">EazyBuy</div>
+            <div class="company-name">E-Apparels</div>
             <div class="invoice-title">INVOICE</div>
           </div>
           
@@ -288,7 +246,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
           
           <div class="footer">
             <p>Thank you for your business!</p>
-            <p>For questions about this invoice, please contact support@eazybuy.com</p>
+            <p>For questions about this invoice, please contact support@e-apparels.com</p>
           </div>
         </body>
       </html>
@@ -341,7 +299,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
         </head>
         <body>
           <div class="header">
-            <div class="company-name">EazyBuy</div>
+            <div class="company-name">E-Apparels</div>
             <div class="order-title">ORDER DETAILS</div>
           </div>
           
