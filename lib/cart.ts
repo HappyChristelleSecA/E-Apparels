@@ -27,7 +27,7 @@ export const getCartFromStorage = (userId?: string): CartItem[] => {
   if (typeof window === "undefined") return []
 
   try {
-    const cartKey = userId ? `eazybuy_cart_${userId}` : "eazybuy_cart_guest"
+    const cartKey = userId ? `eapparels_cart_${userId}` : "eapparels_cart_guest"
     const cartData = localStorage.getItem(cartKey)
     if (!cartData) return []
 
@@ -46,7 +46,7 @@ export const saveCartToStorage = (items: CartItem[], userId?: string): void => {
   if (typeof window === "undefined") return
 
   try {
-    const cartKey = userId ? `eazybuy_cart_${userId}` : "eazybuy_cart_guest"
+    const cartKey = userId ? `eapparels_cart_${userId}` : "eapparels_cart_guest"
     localStorage.setItem(cartKey, JSON.stringify(items))
   } catch (error) {
     console.error("Failed to save cart to storage:", error)
@@ -57,7 +57,7 @@ export const clearUserCart = (userId?: string): void => {
   if (typeof window === "undefined") return
 
   try {
-    const cartKey = userId ? `eazybuy_cart_${userId}` : "eazybuy_cart_guest"
+    const cartKey = userId ? `eapparels_cart_${userId}` : "eapparels_cart_guest"
     localStorage.removeItem(cartKey)
   } catch (error) {
     console.error("Failed to clear user cart:", error)

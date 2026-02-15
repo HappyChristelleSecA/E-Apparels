@@ -10,7 +10,7 @@ export const getWishlistFromStorage = (userId?: string): WishlistItem[] => {
   if (typeof window === "undefined") return []
 
   try {
-    const wishlistKey = userId ? `eazybuy_wishlist_${userId}` : "eazybuy_wishlist_guest"
+    const wishlistKey = userId ? `eapparels_wishlist_${userId}` : "eapparels_wishlist_guest"
     const wishlistData = localStorage.getItem(wishlistKey)
     if (!wishlistData) return []
 
@@ -29,7 +29,7 @@ export const saveWishlistToStorage = (items: WishlistItem[], userId?: string): v
   if (typeof window === "undefined") return
 
   try {
-    const wishlistKey = userId ? `eazybuy_wishlist_${userId}` : "eazybuy_wishlist_guest"
+    const wishlistKey = userId ? `eapparels_wishlist_${userId}` : "eapparels_wishlist_guest"
     localStorage.setItem(wishlistKey, JSON.stringify(items))
   } catch (error) {
     console.error("Failed to save wishlist to storage:", error)
@@ -61,7 +61,7 @@ export const clearUserWishlist = (userId?: string): void => {
   if (typeof window === "undefined") return
 
   try {
-    const wishlistKey = userId ? `eazybuy_wishlist_${userId}` : "eazybuy_wishlist_guest"
+    const wishlistKey = userId ? `eapparels_wishlist_${userId}` : "eapparels_wishlist_guest"
     localStorage.removeItem(wishlistKey)
   } catch (error) {
     console.error("Failed to clear user wishlist:", error)

@@ -221,7 +221,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
         </head>
         <body>
           <div class="header">
-            <div class="company-name">EazyBuy</div>
+            <div class="company-name">E-Apparels</div>
             <div class="invoice-title">INVOICE</div>
           </div>
           
@@ -288,7 +288,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
           
           <div class="footer">
             <p>Thank you for your business!</p>
-            <p>For questions about this invoice, please contact support@eazybuy.com</p>
+            <p>For questions about this invoice, please contact support@e-apparels.com</p>
           </div>
         </body>
       </html>
@@ -341,7 +341,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
         </head>
         <body>
           <div class="header">
-            <div class="company-name">EazyBuy</div>
+            <div class="company-name">E-Apparels</div>
             <div class="order-title">ORDER DETAILS</div>
           </div>
           

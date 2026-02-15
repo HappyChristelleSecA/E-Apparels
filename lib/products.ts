@@ -489,7 +489,7 @@ export const getAllProducts = (): Product[] => {
   if (typeof window !== "undefined" && allProductsCache === null) {
     // Initialize cache on first access in browser
     try {
-      const stored = localStorage.getItem("eazybuy_products")
+      const stored = localStorage.getItem("eapparels_products")
       if (stored) {
         const parsedProducts = JSON.parse(stored)
         if (Array.isArray(parsedProducts) && parsedProducts.length > 0) {

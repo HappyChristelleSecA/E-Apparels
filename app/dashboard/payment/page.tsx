@@ -34,7 +34,7 @@ interface PaymentMethod {
   cardholderName?: string
 }
 
-const STORAGE_KEY = "eazybuy_payment_methods"
+const STORAGE_KEY = "eapparels_payment_methods"
 
 export default function PaymentPage() {
   const { user, isAuthenticated, isLoading } = useAuth()

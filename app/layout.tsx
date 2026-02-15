@@ -20,7 +20,7 @@ const dmSans = DM_Sans({
 })
 
 export const metadata: Metadata = {
-  title: "EazyBuy - Modern E-Commerce",
+  title: "E-Apparels - Modern E-Commerce",
   description: "Your trusted online shopping destination",
     generator: 'v0.app'
 }

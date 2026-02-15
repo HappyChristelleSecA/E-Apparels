@@ -70,7 +70,7 @@ export default function PrivacyPolicyPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  If you have any questions about this Privacy Policy, please contact us at privacy@eazybuy.com or call
+                  If you have any questions about this Privacy Policy, please contact us at privacy@e-apparels.com or call
                   us at +1 (555) 123-4567.
                 </p>
               </CardContent>

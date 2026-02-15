@@ -53,7 +53,7 @@ export default function AboutPage() {
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            About <span className="text-primary">EazyBuy</span>
+            About <span className="text-primary">E-Apparels</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             We're more than just an e-commerce platform. We're your trusted partner in discovering amazing products that
@@ -107,7 +107,7 @@ export default function AboutPage() {
         {/* Features Section */}
         <div className="grid lg:grid-cols-2 gap-12 mb-16">
           <div>
-            <h2 className="text-3xl font-bold mb-6">Why Choose EazyBuy?</h2>
+            <h2 className="text-3xl font-bold mb-6">Why Choose E-Apparels?</h2>
             <div className="space-y-4">
               {features.map((feature, index) => (
                 <div key={index} className="flex items-center space-x-3">

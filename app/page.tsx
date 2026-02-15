@@ -38,7 +38,7 @@ export default function HomePage() {
       <section className="bg-gradient-to-br from-primary/5 to-accent/5 py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
-            Welcome to <span className="text-primary">EazyBuy</span>
+            Welcome to <span className="text-primary">E-Apparels</span>
           </h1>
 
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
@@ -122,7 +122,7 @@ export default function HomePage() {
       {/* Features Section */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose EazyBuy?</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose E-Apparels?</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <Card>
               <CardContent className="p-6 text-center">

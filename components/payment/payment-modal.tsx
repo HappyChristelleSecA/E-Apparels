@@ -40,7 +40,7 @@ interface PaymentModalProps {
   onShippingMethodChange?: (methodId: string) => void
 }
 
-const STORAGE_KEY = "eazybuy_payment_methods"
+const STORAGE_KEY = "eapparels_payment_methods"
 
 export function PaymentModal({
   isOpen,
@@ -364,7 +364,7 @@ export function PaymentModal({
     }
 
     let receiptText = `
-EAZYBUY RECEIPT
+E-APPARELS RECEIPT
 ================
 Receipt #: ${receiptData.receiptNumber}
 Date: ${receiptData.date}
@@ -397,7 +397,7 @@ Total: $${receiptData.total}
 Payment Method: ${receiptData.paymentMethod}
 Status: ${receiptData.status}
 
-Thank you for shopping with EazyBuy!
+Thank you for shopping with E-Apparels!
 ================
     `
 
@@ -405,7 +405,7 @@ Thank you for shopping with EazyBuy!
     const url = window.URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
-    a.download = `EazyBuy-Receipt-${receiptNumber}.txt`
+    a.download = `E-Apparels-Receipt-${receiptNumber}.txt`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
@@ -454,7 +454,7 @@ Thank you for shopping with EazyBuy!
       <!DOCTYPE html>
       <html>
         <head>
-          <title>EazyBuy Receipt - ${receiptNumber}</title>
+          <title>E-Apparels Receipt - ${receiptNumber}</title>
           <style>
             body { font-family: monospace; max-width: 400px; margin: 0 auto; padding: 20px; }
             .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
@@ -467,7 +467,7 @@ Thank you for shopping with EazyBuy!
         </head>
         <body>
           <div class="header">
-            <h2>EAZYBUY RECEIPT</h2>
+            <h2>E-APPARELS RECEIPT</h2>
             <p>Receipt #: ${receiptNumber}</p>
             <p>${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</p>
           </div>
@@ -516,7 +516,7 @@ Thank you for shopping with EazyBuy!
           <div class="footer">
             <p>Payment Method: **** **** **** ${cardLast4}</p>
             <p>Status: PAID</p>
-            <p>Thank you for shopping with EazyBuy!</p>
+            <p>Thank you for shopping with E-Apparels!</p>
           </div>
         </body>
       </html>
