@@ -1,27 +1,33 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Header } from "@/components/layout/header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ProductCard } from "@/components/products/product-card"
 import { SearchAutocomplete } from "@/components/products/search-autocomplete"
 import { getFeaturedProducts, searchProducts } from "@/lib/products"
+import type { Product } from "@/lib/products"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
 import { FaShoppingBag, FaShieldAlt, FaTruck, FaStar, FaArrowRight } from "react-icons/fa"
 
 export default function HomePage() {
-  const featuredProducts = getFeaturedProducts()
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState("")
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([])
+  const [productsLoaded, setProductsLoaded] = useState(false)
+
+  useEffect(() => {
+    setFeaturedProducts(getFeaturedProducts())
+    setProductsLoaded(true)
+  }, [])
 
   const filteredProducts = useMemo(() => {
     if (!searchQuery.trim()) {
       return featuredProducts
     }
-    // Search within featured products only
     const searchResults = searchProducts(searchQuery)
     return searchResults.filter((product) => featuredProducts.some((fp) => fp.id === product.id))
   }, [searchQuery, featuredProducts])
@@ -79,7 +85,21 @@ export default function HomePage() {
             <p className="text-muted-foreground text-lg mb-8">Check out our most popular items</p>
           </div>
 
-          {searchQuery.trim() && filteredProducts.length === 0 ? (
+          {!productsLoaded ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+              {[...Array(6)].map((_, i) => (
+                <Card key={i} className="overflow-hidden animate-pulse">
+                  <div className="h-48 bg-muted" />
+                  <CardContent className="p-4 space-y-3">
+                    <div className="h-5 bg-muted rounded w-3/4" />
+                    <div className="h-4 bg-muted rounded w-1/2" />
+                    <div className="h-8 bg-muted rounded w-1/3" />
+                    <div className="h-10 bg-muted rounded" />
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : searchQuery.trim() && filteredProducts.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground text-lg mb-4">No featured products found for "{searchQuery}"</p>
               <Button

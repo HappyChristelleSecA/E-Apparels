@@ -494,12 +494,11 @@ export const getAllProducts = (): Product[] => {
         const parsedProducts = JSON.parse(stored)
         if (Array.isArray(parsedProducts) && parsedProducts.length > 0) {
           allProductsCache = parsedProducts
-          console.log("[v0] Loaded products from localStorage:", allProductsCache.length)
           return allProductsCache
         }
       }
     } catch (error) {
-      console.warn("[v0] Failed to load from localStorage:", error)
+      console.warn("Failed to load from localStorage:", error)
     }
 
     // Fallback to static products
