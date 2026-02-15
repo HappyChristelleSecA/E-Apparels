@@ -51,6 +51,7 @@ const initializeGlobalAuth = () => {
 
 export function useAuth() {
   const [authState, setAuthState] = useState<AuthState>(globalAuthState)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     const updateLocalState = (newState: AuthState) => {
@@ -61,9 +62,10 @@ export function useAuth() {
 
     if (typeof window !== "undefined" && !globalInitialized) {
       initializeGlobalAuth()
-    } else {
-      setAuthState(globalAuthState)
     }
+
+    setAuthState(globalAuthState)
+    setMounted(true)
 
     return () => {
       stateListeners.delete(updateLocalState)
@@ -141,6 +143,7 @@ export function useAuth() {
 
   return {
     ...authState,
+    isLoading: !mounted || authState.isLoading,
     login,
     register,
     logout,
