@@ -13,7 +13,7 @@ import {
 let globalAuthState: AuthState = {
   user: null,
   isAuthenticated: false,
-  isLoading: true,
+  isLoading: false,
 }
 
 let globalInitialized = false
