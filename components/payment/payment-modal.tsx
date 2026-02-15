@@ -96,8 +96,7 @@ export function PaymentModal({
           } else {
             setPaymentMode("new")
           }
-        } catch (e) {
-          console.error("[v0] Failed to load payment methods:", e)
+        } catch {
           setPaymentMode("new")
         }
       } else {
@@ -232,9 +231,7 @@ export function PaymentModal({
 
     setIsProcessing(true)
 
-    console.log("[v0] Items before storing:", items)
     setPurchasedItems([...items])
-    console.log("[v0] Purchased items set:", [...items])
 
     if (paymentMode === "new" && saveNewCard && paymentData.cardNumber && paymentData.cardholderName) {
       savePaymentMethod(paymentData)
@@ -280,11 +277,7 @@ export function PaymentModal({
           : undefined,
       })
 
-      console.log("[v0] Order created:", newOrder.id)
-
       if (user.email) {
-        console.log("[v0] Sending payment confirmation email to:", user.email)
-
         const baseUrl =
           typeof window !== "undefined"
             ? window.location.origin
@@ -314,23 +307,16 @@ export function PaymentModal({
             }),
           })
 
-          const emailResult = await emailResponse.json()
-          if (emailResult.success) {
-            console.log("[v0] Payment confirmation email sent successfully")
-          } else {
-            console.error("[v0] Failed to send payment confirmation email:", emailResult.error)
-          }
-        } catch (emailError) {
-          console.error("[v0] Error sending payment confirmation email:", emailError)
+          await emailResponse.json()
+        } catch {
+          // Email sending failed silently
         }
       }
-    } catch (error) {
-      console.error("[v0] Error creating order:", error)
+    } catch {
+      // Order creation error handled silently
     }
 
     setStep("success")
-
-    console.log("[v0] Clearing cart after success step")
     clearCart()
     setIsProcessing(false)
   }
@@ -551,11 +537,6 @@ Thank you for shopping with E-Apparels!
   const displayTax = calculateTax(displaySubtotal - totalDiscountAmount)
   const displayTotal = displaySubtotal - totalDiscountAmount + displayTax + displayShippingCost
   const shippingMethod = getShippingMethodById(selectedShippingMethodId)
-
-  console.log("[v0] Display items:", displayItems)
-  console.log("[v0] Current step:", step)
-  console.log("[v0] Purchased items length:", purchasedItems.length)
-  console.log("[v0] Display calculations:", { displaySubtotal, displayTax, displayTotal, displayShippingCost })
 
   const isPaymentValid = () => {
     if (paymentMode === "saved") {

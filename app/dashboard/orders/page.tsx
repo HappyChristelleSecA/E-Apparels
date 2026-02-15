@@ -32,7 +32,8 @@ import { FaBox, FaTruck, FaChevronDown, FaChevronUp, FaUndo, FaTimes } from "rea
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
+import type { Order } from "@/lib/orders"
 
 export default function OrdersPage() {
   const { user, isAuthenticated, isLoading } = useAuth()
@@ -43,12 +44,25 @@ export default function OrdersPage() {
   const [returnReason, setReturnReason] = useState("")
   const [cancelReason, setCancelReason] = useState("")
   const [isProcessing, setIsProcessing] = useState(false)
+  const [orders, setOrders] = useState<Order[]>([])
+  const [ordersLoaded, setOrdersLoaded] = useState(false)
+
+  const refreshOrders = useCallback(() => {
+    if (user) {
+      setOrders(getOrdersByUserId(user.id))
+      setOrdersLoaded(true)
+    }
+  }, [user])
 
   useEffect(() => {
     if (!isLoading && (!isAuthenticated || !user)) {
       router.push("/auth")
     }
   }, [isAuthenticated, user, isLoading, router])
+
+  useEffect(() => {
+    refreshOrders()
+  }, [refreshOrders])
 
   const toggleOrderExpansion = (orderId: string) => {
     const newExpanded = new Set(expandedOrders)
@@ -66,7 +80,7 @@ export default function OrdersPage() {
     if (success) {
       setReturnDialogOrderId(null)
       setReturnReason("")
-      router.refresh()
+      refreshOrders()
     }
     setIsProcessing(false)
   }
@@ -77,7 +91,7 @@ export default function OrdersPage() {
     if (success) {
       setCancelDialogOrderId(null)
       setCancelReason("")
-      router.refresh()
+      refreshOrders()
     }
     setIsProcessing(false)
   }
@@ -98,8 +112,6 @@ export default function OrdersPage() {
   if (!isAuthenticated || !user) {
     return null
   }
-
-  const orders = getOrdersByUserId(user.id)
 
   return (
     <DashboardLayout title="Order History" description="View and track all your orders">
