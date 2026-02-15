@@ -18,6 +18,7 @@ import type { Product } from "@/lib/products"
 import { useAuth } from "@/hooks/use-auth"
 
 interface CartContextType extends CartState {
+  isLoaded: boolean
   addToCart: (product: Product, quantity?: number) => void
   removeFromCart: (productId: string) => void
   updateQuantity: (productId: string, quantity: number) => void
@@ -67,39 +68,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [user, isLoaded])
 
   const addToCart = (product: Product, quantity = 1) => {
-    console.log("[v0] useCart addToCart called with:", { productName: product.name, quantity })
-    console.log("[v0] Current cart state before adding:", {
-      itemsCount: cartState.items.length,
-      total: cartState.total,
-    })
-
     setCartState((prev) => {
-      console.log(
-        "[v0] Previous cart items:",
-        prev.items.map((item) => ({ name: item.product.name, qty: item.quantity })),
-      )
-
       const newItems = addToCartUtil(prev.items, product, quantity)
-      console.log(
-        "[v0] New cart items after addToCartUtil:",
-        newItems.map((item) => ({ name: item.product.name, qty: item.quantity })),
-      )
-
       const newTotal = calculateCartTotal(newItems)
       const newItemCount = calculateItemCount(newItems)
 
-      console.log("[v0] New cart totals:", { newTotal, newItemCount })
-
-      const newState = {
+      return {
         ...prev,
         items: newItems,
         total: newTotal,
         itemCount: newItemCount,
         isOpen: newItems.length > prev.items.length,
       }
-
-      console.log("[v0] ✅ Cart state updated successfully")
-      return newState
     })
   }
 
@@ -163,6 +143,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     <CartContext.Provider
       value={{
         ...cartState,
+        isLoaded,
         addToCart,
         removeFromCart,
         updateQuantity,

@@ -13,10 +13,10 @@ interface WishlistButtonProps {
 }
 
 export function WishlistButton({ product, size = "default" }: WishlistButtonProps) {
-  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
+  const { addToWishlist, removeFromWishlist, isInWishlist, isLoaded } = useWishlist()
   const { isAuthenticated } = useAuth()
   const router = useRouter()
-  const inWishlist = isInWishlist(product.id)
+  const inWishlist = isLoaded && isInWishlist(product.id)
 
   const handleWishlistToggle = () => {
     if (!isAuthenticated) {

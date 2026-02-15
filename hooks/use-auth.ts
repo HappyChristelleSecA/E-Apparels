@@ -38,7 +38,6 @@ const initializeGlobalAuth = () => {
   }
 
   const user = refreshAuthState()
-  console.log("[v0] Global auth initialized with user:", user)
 
   updateGlobalAuthState({
     user,
@@ -76,9 +75,7 @@ export function useAuth() {
     updateGlobalAuthState({ ...globalAuthState, isLoading: true })
 
     try {
-      console.log("[v0] Authenticating user:", email)
       const user = await authenticateUser(email, password)
-      console.log("[v0] Authentication result:", user)
 
       if (user) {
         setCurrentUser(user)
@@ -87,14 +84,12 @@ export function useAuth() {
           isAuthenticated: true,
           isLoading: false,
         })
-        console.log("[v0] Auth state updated after login:", { user, isAuthenticated: true })
         return { success: true, user }
       } else {
         updateGlobalAuthState({ ...globalAuthState, isLoading: false })
         return { success: false, error: "Invalid credentials" }
       }
     } catch (error) {
-      console.log("[v0] Login error:", error)
       updateGlobalAuthState({ ...globalAuthState, isLoading: false })
       return { success: false, error: "Login failed" }
     }
@@ -116,14 +111,12 @@ export function useAuth() {
   }
 
   const logout = () => {
-    console.log("[v0] Logging out user")
     setCurrentUser(null)
     updateGlobalAuthState({
       user: null,
       isAuthenticated: false,
       isLoading: false,
     })
-    console.log("[v0] User logged out, auth state cleared")
   }
 
   const updateProfile = (updatedData: Partial<{ name: string; email: string; phone: string; bio: string }>) => {
@@ -135,7 +128,6 @@ export function useAuth() {
         ...globalAuthState,
         user: updatedUser,
       })
-      console.log("[v0] Profile updated:", updatedUser)
       return { success: true }
     }
     return { success: false, error: "No user logged in" }
