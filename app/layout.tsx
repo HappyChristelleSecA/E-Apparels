@@ -1,22 +1,22 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Space_Grotesk, DM_Sans } from "next/font/google"
+import { Outfit, Inter } from "next/font/google"
 import { CartProvider } from "@/hooks/use-cart"
 import { WishlistProvider } from "@/hooks/use-wishlist"
 import { Footer } from "@/components/layout/footer"
 import { ErrorBoundary } from "@/components/error-boundary"
 import "./globals.css"
 
-const spaceGrotesk = Space_Grotesk({
+const outfit = Outfit({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-space-grotesk",
+  variable: "--font-outfit",
 })
 
-const dmSans = DM_Sans({
+const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-dm-sans",
+  variable: "--font-inter",
 })
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} ${dmSans.variable} antialiased`}>
+    <html lang="en" className={`${outfit.variable} ${inter.variable} antialiased`}>
       <body className="font-sans">
         <ErrorBoundary>
           <CartProvider>

@@ -109,15 +109,15 @@ export function ProductCard({ product, viewMode = "grid", highlightTerm }: Produ
   }
 
   return (
-    <Card className="group hover:shadow-lg transition-all duration-200 overflow-hidden">
+    <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden border-border/60 hover:border-primary/30">
       <div className="relative">
         <Link href={`/products/${product.id}`}>
-          <div className="relative h-48 overflow-hidden">
+          <div className="relative h-56 overflow-hidden bg-secondary/30">
             <Image
               src={product.image || "/placeholder.svg"}
               alt={product.name}
               fill
-              className="object-cover group-hover:scale-105 transition-transform duration-200"
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
             />
           </div>
         </Link>

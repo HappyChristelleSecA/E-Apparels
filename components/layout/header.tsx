@@ -54,10 +54,15 @@ export function Header() {
   )
 
   return (
-    <header className="bg-background border-b border-border sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="text-2xl font-bold text-primary">
-          E-Apparels
+    <header className="bg-background/95 backdrop-blur-md border-b border-border sticky top-0 z-50">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2 group">
+          <span className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground text-sm font-bold">
+            EA
+          </span>
+          <span className="text-xl font-bold text-foreground group-hover:text-primary transition-colors">
+            E-Apparels
+          </span>
         </Link>
 
         {/* Desktop Navigation */}
