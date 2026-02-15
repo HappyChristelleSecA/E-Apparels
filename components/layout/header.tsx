@@ -11,7 +11,7 @@ import { useRouter, usePathname } from "next/navigation"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
 export function Header() {
-  const { user, isAuthenticated, logout } = useAuth()
+  const { user, isAuthenticated, isLoading, logout } = useAuth()
   const router = useRouter()
   const pathname = usePathname()
   const [showSearch, setShowSearch] = useState(false)
@@ -103,7 +103,9 @@ export function Header() {
             </SheetContent>
           </Sheet>
 
-          {isAuthenticated && user ? (
+          {isLoading ? (
+            <div className="w-9 h-9" />
+          ) : isAuthenticated && user ? (
             <>
               <Sheet>
                 <SheetTrigger asChild>
