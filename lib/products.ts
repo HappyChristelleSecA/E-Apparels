@@ -471,8 +471,23 @@ export const products: Product[] = [
 
 let allProductsCache: Product[] | null = null
 
+// Bump this version whenever product data (images, names, etc.) changes in source code.
+// This forces localStorage to discard stale cached products.
+const PRODUCTS_DATA_VERSION = "2"
+
 export const getAllProducts = (): Product[] => {
   if (typeof window !== "undefined" && allProductsCache === null) {
+    // Check if stored data version matches the current code version
+    const storedVersion = localStorage.getItem("eapparels_products_version")
+
+    if (storedVersion !== PRODUCTS_DATA_VERSION) {
+      // Version mismatch — clear stale product data and use fresh static products
+      localStorage.removeItem("eapparels_products")
+      localStorage.setItem("eapparels_products_version", PRODUCTS_DATA_VERSION)
+      allProductsCache = [...products]
+      return allProductsCache
+    }
+
     // Initialize cache on first access in browser
     try {
       const stored = localStorage.getItem("eapparels_products")
@@ -483,8 +498,8 @@ export const getAllProducts = (): Product[] => {
           return allProductsCache
         }
       }
-    } catch (error) {
-      console.warn("Failed to load from localStorage:", error)
+    } catch {
+      // ignore
     }
 
     // Fallback to static products
