@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { FaCreditCard, FaLock, FaCheckCircle, FaTag, FaExclamationTriangle, FaShoppingCart } from "react-icons/fa"
+import { FaCreditCard, FaLock, FaCheckCircle, FaTag, FaExclamationTriangle, FaShoppingCart, FaTruck } from "react-icons/fa"
 import { useCart } from "@/hooks/use-cart"
 import { useAuth } from "@/hooks/use-auth"
 import { createOrder } from "@/lib/orders"
@@ -52,7 +52,7 @@ export function PaymentModal({
 }: PaymentModalProps) {
   const { items, clearCart, validateStock } = useCart()
   const { user } = useAuth()
-  const [step, setStep] = useState<"review" | "payment" | "success">("review")
+  const [step, setStep] = useState<"review" | "delivery" | "payment" | "success">("review")
   const [isProcessing, setIsProcessing] = useState(false)
   const [receiptNumber, setReceiptNumber] = useState("")
   const [purchasedItems, setPurchasedItems] = useState<typeof items>([])
@@ -64,6 +64,16 @@ export function PaymentModal({
   const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string | null>(null)
   const [paymentMode, setPaymentMode] = useState<"saved" | "new">("new")
   const [saveNewCard, setSaveNewCard] = useState(false)
+
+  const [deliveryData, setDeliveryData] = useState({
+    fullName: "",
+    phone: "",
+    street: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    country: "USA",
+  })
 
   const [paymentData, setPaymentData] = useState({
     cardNumber: "",
@@ -259,12 +269,12 @@ export function PaymentModal({
         tax: tax,
         total: total,
         shippingAddress: {
-          name: paymentData.cardholderName || user.name || "Customer",
-          street: paymentData.billingAddress || "123 Main St",
-          city: paymentData.city || "New York",
-          state: "NY",
-          zipCode: paymentData.zipCode || "10001",
-          country: "USA",
+          name: deliveryData.fullName || user.name || "Customer",
+          street: deliveryData.street || "123 Main St",
+          city: deliveryData.city || "New York",
+          state: deliveryData.state || "NY",
+          zipCode: deliveryData.zipCode || "10001",
+          country: deliveryData.country || "USA",
         },
         appliedDiscounts: appliedDiscounts.map((d) => ({ code: d.discountCode, amount: d.discountAmount })),
         shippingMethod: shippingMethod
@@ -517,6 +527,15 @@ Thank you for shopping with E-Apparels!
     setStep("review")
     setPurchasedItems([])
     setStockValidationError(null)
+    setDeliveryData({
+      fullName: "",
+      phone: "",
+      street: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      country: "USA",
+    })
     setPaymentData({
       cardNumber: "",
       expiryDate: "",
@@ -668,12 +687,116 @@ Thank you for shopping with E-Apparels!
                     <Button variant="outline" onClick={handleClose} className="flex-1 bg-transparent">
                       Back to Cart
                     </Button>
-                    <Button onClick={() => setStep("payment")} className="flex-1">
-                      Continue to Payment
+                    <Button onClick={() => setStep("delivery")} className="flex-1">
+                      Continue to Delivery
                     </Button>
                   </div>
                 </>
               )}
+            </div>
+          </>
+        ) : step === "delivery" ? (
+          <>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <FaTruck className="h-5 w-5" />
+                Delivery Information
+              </DialogTitle>
+            </DialogHeader>
+
+            <div className="space-y-4">
+              <Card>
+                <CardContent className="p-4 space-y-4">
+                  <div>
+                    <Label htmlFor="deliveryName">Full Name</Label>
+                    <Input
+                      id="deliveryName"
+                      placeholder="Enter your full name"
+                      value={deliveryData.fullName}
+                      onChange={(e) => setDeliveryData((prev) => ({ ...prev, fullName: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="deliveryPhone">Phone Number</Label>
+                    <Input
+                      id="deliveryPhone"
+                      type="tel"
+                      placeholder="Enter your phone number"
+                      value={deliveryData.phone}
+                      onChange={(e) => setDeliveryData((prev) => ({ ...prev, phone: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="deliveryStreet">Street Address</Label>
+                    <Input
+                      id="deliveryStreet"
+                      placeholder="123 Main Street"
+                      value={deliveryData.street}
+                      onChange={(e) => setDeliveryData((prev) => ({ ...prev, street: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="deliveryCity">City</Label>
+                      <Input
+                        id="deliveryCity"
+                        placeholder="New York"
+                        value={deliveryData.city}
+                        onChange={(e) => setDeliveryData((prev) => ({ ...prev, city: e.target.value }))}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="deliveryState">State/Province</Label>
+                      <Input
+                        id="deliveryState"
+                        placeholder="NY"
+                        value={deliveryData.state}
+                        onChange={(e) => setDeliveryData((prev) => ({ ...prev, state: e.target.value }))}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="deliveryZip">ZIP / Postal Code</Label>
+                      <Input
+                        id="deliveryZip"
+                        placeholder="10001"
+                        value={deliveryData.zipCode}
+                        onChange={(e) => setDeliveryData((prev) => ({ ...prev, zipCode: e.target.value }))}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="deliveryCountry">Country</Label>
+                      <Input
+                        id="deliveryCountry"
+                        placeholder="USA"
+                        value={deliveryData.country}
+                        onChange={(e) => setDeliveryData((prev) => ({ ...prev, country: e.target.value }))}
+                        required
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => setStep("review")} className="flex-1 bg-transparent">
+                  Back
+                </Button>
+                <Button
+                  onClick={() => setStep("payment")}
+                  className="flex-1"
+                  disabled={!deliveryData.fullName || !deliveryData.street || !deliveryData.city || !deliveryData.zipCode}
+                >
+                  Continue to Payment
+                </Button>
+              </div>
             </div>
           </>
         ) : step === "payment" ? (
@@ -893,7 +1016,7 @@ Thank you for shopping with E-Apparels!
                   </div>
 
                   <div className="flex gap-2">
-                    <Button variant="outline" onClick={() => setStep("review")} className="flex-1 bg-transparent">
+                    <Button variant="outline" onClick={() => setStep("delivery")} className="flex-1 bg-transparent">
                       Back
                     </Button>
                     <Button

@@ -95,11 +95,11 @@ export function useAuth() {
     }
   }
 
-  const register = async (email: string, password: string, name: string) => {
+  const register = async (email: string, password: string, name: string, phone?: string) => {
     updateGlobalAuthState({ ...globalAuthState, isLoading: true })
 
     try {
-      const user = await registerUser(email, password, name)
+      const user = await registerUser(email, password, name, phone)
       if (user) {
         updateGlobalAuthState({ ...globalAuthState, isLoading: false })
         return { success: true }

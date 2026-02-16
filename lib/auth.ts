@@ -4,6 +4,7 @@ export interface User {
   id: string
   email: string
   name: string
+  phone?: string
   role: UserRole
   createdAt: Date
   password?: string
@@ -94,7 +95,7 @@ export const authenticateUser = async (email: string, password: string): Promise
   return null
 }
 
-export const registerUser = async (email: string, password: string, name: string): Promise<User | null> => {
+export const registerUser = async (email: string, password: string, name: string, phone?: string): Promise<User | null> => {
   // Simulate API call delay
   await new Promise((resolve) => setTimeout(resolve, 1000))
 
@@ -112,6 +113,7 @@ export const registerUser = async (email: string, password: string, name: string
     id: Date.now().toString(),
     email,
     name,
+    phone: phone || "",
     role: "user",
     createdAt: new Date(),
     password, // Keep password for authentication
