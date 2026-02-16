@@ -1,22 +1,22 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Outfit, Inter } from "next/font/google"
+import { Playfair_Display, Nunito } from "next/font/google"
 import { CartProvider } from "@/hooks/use-cart"
 import { WishlistProvider } from "@/hooks/use-wishlist"
 import { Footer } from "@/components/layout/footer"
 import { ErrorBoundary } from "@/components/error-boundary"
 import "./globals.css"
 
-const outfit = Outfit({
+const playfair = Playfair_Display({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-outfit",
+  variable: "--font-playfair",
 })
 
-const inter = Inter({
+const nunito = Nunito({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-inter",
+  variable: "--font-nunito",
 })
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${outfit.variable} ${inter.variable} antialiased`}>
+    <html lang="en" className={`${playfair.variable} ${nunito.variable} antialiased`}>
       <body className="font-sans">
         <ErrorBoundary>
           <CartProvider>
