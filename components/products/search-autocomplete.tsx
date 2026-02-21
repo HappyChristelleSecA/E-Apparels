@@ -27,7 +27,7 @@ export function SearchAutocomplete({
 
   // Load recent searches from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem("eazybuy-recent-searches")
+    const saved = localStorage.getItem("eapparels-recent-searches")
     if (saved) {
       setRecentSearches(JSON.parse(saved))
     }
@@ -66,7 +66,7 @@ export function SearchAutocomplete({
       // Add to recent searches
       const updated = [query, ...recentSearches.filter((s) => s !== query)].slice(0, 5)
       setRecentSearches(updated)
-      localStorage.setItem("eazybuy-recent-searches", JSON.stringify(updated))
+      localStorage.setItem("eapparels-recent-searches", JSON.stringify(updated))
 
       onSearch(query)
       setShowSuggestions(false)
@@ -80,7 +80,7 @@ export function SearchAutocomplete({
 
   const clearRecentSearches = () => {
     setRecentSearches([])
-    localStorage.removeItem("eazybuy-recent-searches")
+    localStorage.removeItem("eapparels-recent-searches")
   }
 
   return (

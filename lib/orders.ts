@@ -1,5 +1,69 @@
 import type { Product } from "./products"
 
+const ORDERS_STORAGE_KEY = "eapparels_orders"
+const TRACKING_STORAGE_KEY = "eapparels_tracking_events"
+
+function loadOrdersFromStorage(): Order[] {
+  if (typeof window === "undefined") return []
+  try {
+    const stored = localStorage.getItem(ORDERS_STORAGE_KEY)
+    if (stored) {
+      const parsed = JSON.parse(stored)
+      return parsed.map((o: any) => ({
+        ...o,
+        orderDate: new Date(o.orderDate),
+        estimatedDelivery: o.estimatedDelivery ? new Date(o.estimatedDelivery) : undefined,
+      }))
+    }
+  } catch {
+    // ignore
+  }
+  return []
+}
+
+function loadTrackingFromStorage(): OrderTrackingEvent[] {
+  if (typeof window === "undefined") return []
+  try {
+    const stored = localStorage.getItem(TRACKING_STORAGE_KEY)
+    if (stored) {
+      const parsed = JSON.parse(stored)
+      return parsed.map((e: any) => ({
+        ...e,
+        timestamp: new Date(e.timestamp),
+      }))
+    }
+  } catch {
+    // ignore
+  }
+  return []
+}
+
+function saveOrdersToStorage() {
+  if (typeof window === "undefined") return
+  try {
+    // Only save user-created orders (not mock ones)
+    const userOrders = mockOrders.filter(
+      (o) => !["ORD-001", "ORD-002", "ORD-003"].includes(o.id),
+    )
+    localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(userOrders))
+  } catch {
+    // ignore
+  }
+}
+
+function saveTrackingToStorage() {
+  if (typeof window === "undefined") return
+  try {
+    // Only save user-created tracking events (not mock ones)
+    const userEvents = mockTrackingEvents.filter(
+      (e) => !e.id.startsWith("EVT-00"),
+    )
+    localStorage.setItem(TRACKING_STORAGE_KEY, JSON.stringify(userEvents))
+  } catch {
+    // ignore
+  }
+}
+
 export type OrderStatus =
   | "pending"
   | "processing"
@@ -77,8 +141,8 @@ export const mockOrders: Order[] = [
     tax: 16.0,
     total: 215.99,
     status: "delivered",
-    orderDate: new Date("2024-01-15"),
-    estimatedDelivery: new Date("2024-01-18"),
+    orderDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
+    estimatedDelivery: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago
     trackingNumber: "TRK123456789",
     shippingAddress: {
       name: "John Doe",
@@ -125,8 +189,8 @@ export const mockOrders: Order[] = [
     tax: 4.8,
     total: 74.77,
     status: "shipped",
-    orderDate: new Date("2024-01-20"),
-    estimatedDelivery: new Date("2024-01-25"),
+    orderDate: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
+    estimatedDelivery: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // 2 days from now
     trackingNumber: "TRK987654321",
     shippingAddress: {
       name: "John Doe",
@@ -172,8 +236,8 @@ export const mockOrders: Order[] = [
     tax: 4.0,
     total: 63.98,
     status: "processing",
-    orderDate: new Date("2024-01-22"),
-    estimatedDelivery: new Date("2024-01-28"),
+    orderDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
+    estimatedDelivery: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days from now
     trackingNumber: "TRK987654321",
     shippingAddress: {
       name: "John Doe",
@@ -192,11 +256,32 @@ export const mockOrders: Order[] = [
   },
 ]
 
+// Load persisted user orders on module init
+let _ordersLoaded = false
+function ensureOrdersLoaded() {
+  if (_ordersLoaded) return
+  _ordersLoaded = true
+  const storedOrders = loadOrdersFromStorage()
+  storedOrders.forEach((o) => {
+    if (!mockOrders.find((existing) => existing.id === o.id)) {
+      mockOrders.push(o)
+    }
+  })
+  const storedEvents = loadTrackingFromStorage()
+  storedEvents.forEach((e) => {
+    if (!mockTrackingEvents.find((existing) => existing.id === e.id)) {
+      mockTrackingEvents.push(e)
+    }
+  })
+}
+
 export const getOrdersByUserId = (userId: string): Order[] => {
+  ensureOrdersLoaded()
   return mockOrders.filter((order) => order.userId === userId)
 }
 
 export const getOrderById = (orderId: string): Order | undefined => {
+  ensureOrdersLoaded()
   return mockOrders.find((order) => order.id === orderId)
 }
 
@@ -278,21 +363,21 @@ export const mockTrackingEvents: OrderTrackingEvent[] = [
     id: "EVT-001",
     orderId: "ORD-001",
     status: "pending",
-    timestamp: new Date("2024-01-15T10:00:00"),
+    timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
     description: "Order placed and payment confirmed",
   },
   {
     id: "EVT-002",
     orderId: "ORD-001",
     status: "processing",
-    timestamp: new Date("2024-01-15T14:30:00"),
+    timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000 + 4 * 60 * 60 * 1000),
     description: "Order is being prepared for shipment",
   },
   {
     id: "EVT-003",
     orderId: "ORD-001",
     status: "shipped",
-    timestamp: new Date("2024-01-16T09:15:00"),
+    timestamp: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
     location: "New York, NY",
     description: "Package shipped from fulfillment center",
     carrier: "FedEx",
@@ -301,7 +386,7 @@ export const mockTrackingEvents: OrderTrackingEvent[] = [
     id: "EVT-004",
     orderId: "ORD-001",
     status: "shipped",
-    timestamp: new Date("2024-01-17T11:45:00"),
+    timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
     location: "Newark, NJ",
     description: "Package in transit",
     carrier: "FedEx",
@@ -310,7 +395,7 @@ export const mockTrackingEvents: OrderTrackingEvent[] = [
     id: "EVT-005",
     orderId: "ORD-001",
     status: "delivered",
-    timestamp: new Date("2024-01-18T15:20:00"),
+    timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
     location: "123 Main St, New York, NY",
     description: "Package delivered successfully",
     carrier: "FedEx",
@@ -320,21 +405,21 @@ export const mockTrackingEvents: OrderTrackingEvent[] = [
     id: "EVT-006",
     orderId: "ORD-002",
     status: "pending",
-    timestamp: new Date("2024-01-20T11:30:00"),
+    timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
     description: "Order placed and payment confirmed",
   },
   {
     id: "EVT-007",
     orderId: "ORD-002",
     status: "processing",
-    timestamp: new Date("2024-01-21T08:00:00"),
+    timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
     description: "Order is being prepared for shipment",
   },
   {
     id: "EVT-008",
     orderId: "ORD-002",
     status: "shipped",
-    timestamp: new Date("2024-01-22T10:30:00"),
+    timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
     location: "New York, NY",
     description: "Package shipped from fulfillment center",
     carrier: "UPS",
@@ -343,7 +428,7 @@ export const mockTrackingEvents: OrderTrackingEvent[] = [
     id: "EVT-009",
     orderId: "ORD-002",
     status: "shipped",
-    timestamp: new Date("2024-01-23T14:15:00"),
+    timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000),
     location: "Philadelphia, PA",
     description: "Package in transit",
     carrier: "UPS",
@@ -353,14 +438,14 @@ export const mockTrackingEvents: OrderTrackingEvent[] = [
     id: "EVT-010",
     orderId: "ORD-003",
     status: "pending",
-    timestamp: new Date("2024-01-22T16:45:00"),
+    timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
     description: "Order placed and payment confirmed",
   },
   {
     id: "EVT-011",
     orderId: "ORD-003",
     status: "processing",
-    timestamp: new Date("2024-01-23T09:00:00"),
+    timestamp: new Date(Date.now() - 16 * 60 * 60 * 1000),
     description: "Order is being prepared for shipment",
   },
 ]
@@ -388,6 +473,7 @@ export const getOrderTracking = (orderId: string): OrderTracking | undefined => 
 }
 
 export const updateOrderStatus = (orderId: string, newStatus: OrderStatus, description?: string): boolean => {
+  ensureOrdersLoaded()
   const orderIndex = mockOrders.findIndex((order) => order.id === orderId)
   if (orderIndex === -1) return false
 
@@ -404,6 +490,11 @@ export const updateOrderStatus = (orderId: string, newStatus: OrderStatus, descr
   }
 
   mockTrackingEvents.push(newEvent)
+
+  // Persist changes
+  saveOrdersToStorage()
+  saveTrackingToStorage()
+
   return true
 }
 
@@ -471,6 +562,9 @@ export const createOrder = (orderData: {
     shippingMethod: orderData.shippingMethod,
   }
 
+  // Ensure we've loaded any existing persisted orders first
+  ensureOrdersLoaded()
+
   // Add to mock orders array
   mockOrders.push(newOrder)
 
@@ -484,6 +578,10 @@ export const createOrder = (orderData: {
   }
 
   mockTrackingEvents.push(initialEvent)
+
+  // Persist to localStorage
+  saveOrdersToStorage()
+  saveTrackingToStorage()
 
   return newOrder
 }

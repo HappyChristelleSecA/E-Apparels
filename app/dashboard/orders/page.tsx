@@ -5,25 +5,64 @@ import { DashboardLayout } from "@/components/dashboard/dashboard-layout"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { getOrdersByUserId, getOrderStatusColor, getOrderStatusText, getOrderTracking } from "@/lib/orders"
+import {
+  getOrdersByUserId,
+  getOrderStatusColor,
+  getOrderStatusText,
+  getOrderTracking,
+  canReturnOrder,
+  canCancelOrder,
+  requestReturn,
+  cancelOrder,
+} from "@/lib/orders"
 import { OrderTrackingCard } from "@/components/orders/order-tracking-card"
 import { OrderTrackingTimeline } from "@/components/orders/order-tracking-timeline"
-import { FaBox, FaTruck, FaChevronDown, FaChevronUp } from "react-icons/fa"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { FaBox, FaTruck, FaChevronDown, FaChevronUp, FaUndo, FaTimes } from "react-icons/fa"
 import Link from "next/link"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
+import type { Order } from "@/lib/orders"
 
 export default function OrdersPage() {
   const { user, isAuthenticated, isLoading } = useAuth()
   const router = useRouter()
   const [expandedOrders, setExpandedOrders] = useState<Set<string>>(new Set())
+  const [returnDialogOrderId, setReturnDialogOrderId] = useState<string | null>(null)
+  const [cancelDialogOrderId, setCancelDialogOrderId] = useState<string | null>(null)
+  const [returnReason, setReturnReason] = useState("")
+  const [cancelReason, setCancelReason] = useState("")
+  const [isProcessing, setIsProcessing] = useState(false)
+  const [orders, setOrders] = useState<Order[]>([])
+  const [ordersLoaded, setOrdersLoaded] = useState(false)
+
+  const refreshOrders = useCallback(() => {
+    if (user) {
+      setOrders(getOrdersByUserId(user.id))
+      setOrdersLoaded(true)
+    }
+  }, [user])
 
   useEffect(() => {
     if (!isLoading && (!isAuthenticated || !user)) {
       router.push("/auth")
     }
   }, [isAuthenticated, user, isLoading, router])
+
+  useEffect(() => {
+    refreshOrders()
+  }, [refreshOrders])
 
   const toggleOrderExpansion = (orderId: string) => {
     const newExpanded = new Set(expandedOrders)
@@ -33,6 +72,28 @@ export default function OrdersPage() {
       newExpanded.add(orderId)
     }
     setExpandedOrders(newExpanded)
+  }
+
+  const handleRequestReturn = async (orderId: string) => {
+    setIsProcessing(true)
+    const success = requestReturn(orderId, returnReason)
+    if (success) {
+      setReturnDialogOrderId(null)
+      setReturnReason("")
+      refreshOrders()
+    }
+    setIsProcessing(false)
+  }
+
+  const handleCancelOrder = async (orderId: string) => {
+    setIsProcessing(true)
+    const success = cancelOrder(orderId, cancelReason)
+    if (success) {
+      setCancelDialogOrderId(null)
+      setCancelReason("")
+      refreshOrders()
+    }
+    setIsProcessing(false)
   }
 
   if (isLoading) {
@@ -51,8 +112,6 @@ export default function OrdersPage() {
   if (!isAuthenticated || !user) {
     return null
   }
-
-  const orders = getOrdersByUserId(user.id)
 
   return (
     <DashboardLayout title="Order History" description="View and track all your orders">
@@ -141,7 +200,7 @@ export default function OrdersPage() {
                             </p>
                           )}
                         </div>
-                        <div className="flex space-x-2">
+                        <div className="flex flex-wrap gap-2">
                           <Button asChild variant="default" size="sm">
                             <Link href={`/dashboard/orders/${order.id}`}>
                               <FaBox className="h-4 w-4 mr-2" />
@@ -158,6 +217,114 @@ export default function OrdersPage() {
                                 <FaChevronDown className="h-3 w-3 ml-2" />
                               )}
                             </Button>
+                          )}
+                          {canReturnOrder(order) && (
+                            <Dialog
+                              open={returnDialogOrderId === order.id}
+                              onOpenChange={(open) => {
+                                setReturnDialogOrderId(open ? order.id : null)
+                                if (!open) setReturnReason("")
+                              }}
+                            >
+                              <DialogTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-orange-600 hover:text-orange-700 hover:bg-orange-50 bg-transparent border-orange-300"
+                                >
+                                  <FaUndo className="h-4 w-4 mr-2" />
+                                  Return Order
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>Return Order #{order.id}</DialogTitle>
+                                  <DialogDescription>
+                                    Request a return for this order. Returns are accepted within 30 days of delivery. Our
+                                    team will review your request and provide return instructions.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <div className="space-y-4">
+                                  <div>
+                                    <Label htmlFor={`return-reason-${order.id}`}>Reason for return</Label>
+                                    <Textarea
+                                      id={`return-reason-${order.id}`}
+                                      placeholder="Please describe the reason for your return request..."
+                                      value={returnReason}
+                                      onChange={(e) => setReturnReason(e.target.value)}
+                                      className="mt-2"
+                                      required
+                                    />
+                                  </div>
+                                </div>
+                                <DialogFooter>
+                                  <Button variant="outline" onClick={() => setReturnDialogOrderId(null)}>
+                                    Cancel
+                                  </Button>
+                                  <Button
+                                    onClick={() => handleRequestReturn(order.id)}
+                                    disabled={isProcessing || !returnReason.trim()}
+                                  >
+                                    {isProcessing ? "Requesting..." : "Request Return"}
+                                  </Button>
+                                </DialogFooter>
+                              </DialogContent>
+                            </Dialog>
+                          )}
+                          {canCancelOrder(order) && (
+                            <Dialog
+                              open={cancelDialogOrderId === order.id}
+                              onOpenChange={(open) => {
+                                setCancelDialogOrderId(open ? order.id : null)
+                                if (!open) setCancelReason("")
+                              }}
+                            >
+                              <DialogTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-red-600 hover:text-red-700 hover:bg-red-50 bg-transparent border-red-300"
+                                >
+                                  <FaTimes className="h-4 w-4 mr-2" />
+                                  Cancel Order
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  <DialogTitle>Cancel Order #{order.id}</DialogTitle>
+                                  <DialogDescription>
+                                    Are you sure you want to cancel this order? This action cannot be undone. You can
+                                    cancel orders within 24 hours of placement.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <div className="space-y-4">
+                                  <div>
+                                    <Label htmlFor={`cancel-reason-${order.id}`}>
+                                      Reason for cancellation (optional)
+                                    </Label>
+                                    <Textarea
+                                      id={`cancel-reason-${order.id}`}
+                                      placeholder="Please let us know why you're cancelling this order..."
+                                      value={cancelReason}
+                                      onChange={(e) => setCancelReason(e.target.value)}
+                                      className="mt-2"
+                                    />
+                                  </div>
+                                </div>
+                                <DialogFooter>
+                                  <Button variant="outline" onClick={() => setCancelDialogOrderId(null)}>
+                                    Keep Order
+                                  </Button>
+                                  <Button
+                                    variant="destructive"
+                                    onClick={() => handleCancelOrder(order.id)}
+                                    disabled={isProcessing}
+                                  >
+                                    {isProcessing ? "Cancelling..." : "Cancel Order"}
+                                  </Button>
+                                </DialogFooter>
+                              </DialogContent>
+                            </Dialog>
                           )}
                         </div>
                       </div>

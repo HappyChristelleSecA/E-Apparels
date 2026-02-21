@@ -266,7 +266,7 @@ export default function ContactPage() {
                   <Mail className="h-5 w-5 text-primary mt-0.5" />
                   <div>
                     <p className="font-medium">Email</p>
-                    <p className="text-sm text-muted-foreground">support@eazybuy.com</p>
+                    <p className="text-sm text-muted-foreground">support@e-apparels.com</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-3">

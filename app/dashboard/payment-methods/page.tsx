@@ -92,7 +92,7 @@ interface PaymentMethod {
   isDefault: boolean
 }
 
-const STORAGE_KEY = "eazybuy_payment_methods_alt"
+const STORAGE_KEY = "eapparels_payment_methods_alt"
 
 const initialPaymentMethods: PaymentMethod[] = [
   {

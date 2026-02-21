@@ -25,12 +25,6 @@ export default function ProductsPage() {
       const visibleProducts = products.filter((product) => product.visible !== false)
       setAllProducts(visibleProducts)
       setFilteredProducts(visibleProducts)
-
-      console.log("[v0] Loaded products for shopping page:", visibleProducts.length)
-      console.log(
-        "[v0] Visible product names:",
-        visibleProducts.map((p) => p.name),
-      )
     }
 
     loadProducts()

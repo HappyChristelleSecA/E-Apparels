@@ -63,7 +63,7 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
-        <CardDescription>Sign in to your EazyBuy account</CardDescription>
+        <CardDescription>Sign in to your E-Apparels account</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -110,7 +110,7 @@ export function LoginForm({ onToggleMode }: LoginFormProps) {
         </div>
         <div className="mt-4 p-3 bg-muted rounded-md text-sm">
           <p className="font-medium mb-1">Demo Credentials:</p>
-          <p>Admin: admin@eazybuy.com / password123</p>
+          <p>Admin: admin@e-apparels.com / password123</p>
           <p>User: user@example.com / password123</p>
         </div>
       </CardContent>

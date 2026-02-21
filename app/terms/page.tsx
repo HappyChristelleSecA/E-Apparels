@@ -21,7 +21,7 @@ export default function TermsOfServicePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  By accessing and using EazyBuy, you accept and agree to be bound by the terms and provision of this
+                  By accessing and using E-Apparels, you accept and agree to be bound by the terms and provision of this
                   agreement. If you do not agree to abide by the above, please do not use this service.
                 </p>
               </CardContent>
@@ -33,7 +33,7 @@ export default function TermsOfServicePage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Permission is granted to temporarily download one copy of the materials on EazyBuy's website for
+                  Permission is granted to temporarily download one copy of the materials on E-Apparels's website for
                   personal, non-commercial transitory viewing only.
                 </p>
                 <p className="text-muted-foreground">
@@ -88,7 +88,7 @@ export default function TermsOfServicePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Questions about the Terms of Service should be sent to us at legal@eazybuy.com or +1 (555) 123-4567.
+                  Questions about the Terms of Service should be sent to us at legal@e-apparels.com or +1 (555) 123-4567.
                 </p>
               </CardContent>
             </Card>

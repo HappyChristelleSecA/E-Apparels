@@ -17,7 +17,6 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (!isLoading && (!isAuthenticated || !user || user.role !== "admin")) {
-      console.log("[v0] Admin access denied:", { isAuthenticated, user: user?.role })
       router.push("/")
     }
   }, [isAuthenticated, user, isLoading, router])

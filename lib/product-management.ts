@@ -4,7 +4,7 @@ import { type Product, products as defaultProducts, refreshProductsCache } from 
 let memoryProducts: Product[] = [...defaultProducts]
 let isInitialized = false
 
-const IMAGES_STORAGE_KEY = "eazybuy_product_images"
+const IMAGES_STORAGE_KEY = "eapparels_product_images"
 
 const saveImagesToStorage = (images: Record<string, { image?: string; images?: string[] }>): void => {
   if (typeof window === "undefined") return
@@ -115,7 +115,7 @@ const tryLoadFromLocalStorage = (): Product[] | null => {
   if (typeof window === "undefined") return null
 
   try {
-    const stored = localStorage.getItem("eazybuy_products")
+    const stored = localStorage.getItem("eapparels_products")
     if (stored) {
       const parsedProducts = JSON.parse(stored)
       if (Array.isArray(parsedProducts) && parsedProducts.length > 0) {
@@ -136,7 +136,7 @@ const trySaveToLocalStorage = (products: Product[]): void => {
   try {
     const compressedProducts = products.map(compressProductForStorage)
     const jsonString = JSON.stringify(compressedProducts)
-    localStorage.setItem("eazybuy_products", jsonString)
+    localStorage.setItem("eapparels_products", jsonString)
     console.log("[v0] Successfully saved to localStorage:", products.length, "products")
   } catch (error) {
     console.warn("[v0] Failed to save to localStorage (using memory only):", error)

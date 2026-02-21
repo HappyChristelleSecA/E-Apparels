@@ -74,6 +74,9 @@ export default function AdminOrdersPage() {
               <SelectItem value="shipped">Shipped</SelectItem>
               <SelectItem value="delivered">Delivered</SelectItem>
               <SelectItem value="cancelled">Cancelled</SelectItem>
+              <SelectItem value="return_requested">Return Requested</SelectItem>
+              <SelectItem value="returned">Returned</SelectItem>
+              <SelectItem value="refunded">Refunded</SelectItem>
             </SelectContent>
           </Select>
         </div>

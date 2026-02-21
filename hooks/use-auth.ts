@@ -13,7 +13,7 @@ import {
 let globalAuthState: AuthState = {
   user: null,
   isAuthenticated: false,
-  isLoading: true,
+  isLoading: false,
 }
 
 let globalInitialized = false
@@ -38,7 +38,6 @@ const initializeGlobalAuth = () => {
   }
 
   const user = refreshAuthState()
-  console.log("[v0] Global auth initialized with user:", user)
 
   updateGlobalAuthState({
     user,
@@ -51,6 +50,7 @@ const initializeGlobalAuth = () => {
 
 export function useAuth() {
   const [authState, setAuthState] = useState<AuthState>(globalAuthState)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     const updateLocalState = (newState: AuthState) => {
@@ -61,9 +61,10 @@ export function useAuth() {
 
     if (typeof window !== "undefined" && !globalInitialized) {
       initializeGlobalAuth()
-    } else {
-      setAuthState(globalAuthState)
     }
+
+    setAuthState(globalAuthState)
+    setMounted(true)
 
     return () => {
       stateListeners.delete(updateLocalState)
@@ -74,9 +75,7 @@ export function useAuth() {
     updateGlobalAuthState({ ...globalAuthState, isLoading: true })
 
     try {
-      console.log("[v0] Authenticating user:", email)
       const user = await authenticateUser(email, password)
-      console.log("[v0] Authentication result:", user)
 
       if (user) {
         setCurrentUser(user)
@@ -85,24 +84,22 @@ export function useAuth() {
           isAuthenticated: true,
           isLoading: false,
         })
-        console.log("[v0] Auth state updated after login:", { user, isAuthenticated: true })
         return { success: true, user }
       } else {
         updateGlobalAuthState({ ...globalAuthState, isLoading: false })
         return { success: false, error: "Invalid credentials" }
       }
     } catch (error) {
-      console.log("[v0] Login error:", error)
       updateGlobalAuthState({ ...globalAuthState, isLoading: false })
       return { success: false, error: "Login failed" }
     }
   }
 
-  const register = async (email: string, password: string, name: string) => {
+  const register = async (email: string, password: string, name: string, phone?: string) => {
     updateGlobalAuthState({ ...globalAuthState, isLoading: true })
 
     try {
-      const user = await registerUser(email, password, name)
+      const user = await registerUser(email, password, name, phone)
       if (user) {
         updateGlobalAuthState({ ...globalAuthState, isLoading: false })
         return { success: true }
@@ -114,14 +111,12 @@ export function useAuth() {
   }
 
   const logout = () => {
-    console.log("[v0] Logging out user")
     setCurrentUser(null)
     updateGlobalAuthState({
       user: null,
       isAuthenticated: false,
       isLoading: false,
     })
-    console.log("[v0] User logged out, auth state cleared")
   }
 
   const updateProfile = (updatedData: Partial<{ name: string; email: string; phone: string; bio: string }>) => {
@@ -133,7 +128,6 @@ export function useAuth() {
         ...globalAuthState,
         user: updatedUser,
       })
-      console.log("[v0] Profile updated:", updatedUser)
       return { success: true }
     }
     return { success: false, error: "No user logged in" }
@@ -141,6 +135,7 @@ export function useAuth() {
 
   return {
     ...authState,
+    isLoading: !mounted || authState.isLoading,
     login,
     register,
     logout,

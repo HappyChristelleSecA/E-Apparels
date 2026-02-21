@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { FaCreditCard, FaLock, FaCheckCircle, FaTag, FaExclamationTriangle, FaShoppingCart } from "react-icons/fa"
+import { FaCreditCard, FaLock, FaCheckCircle, FaTag, FaExclamationTriangle, FaShoppingCart, FaTruck } from "react-icons/fa"
 import { useCart } from "@/hooks/use-cart"
 import { useAuth } from "@/hooks/use-auth"
 import { createOrder } from "@/lib/orders"
@@ -40,7 +40,7 @@ interface PaymentModalProps {
   onShippingMethodChange?: (methodId: string) => void
 }
 
-const STORAGE_KEY = "eazybuy_payment_methods"
+const STORAGE_KEY = "eapparels_payment_methods"
 
 export function PaymentModal({
   isOpen,
@@ -52,7 +52,7 @@ export function PaymentModal({
 }: PaymentModalProps) {
   const { items, clearCart, validateStock } = useCart()
   const { user } = useAuth()
-  const [step, setStep] = useState<"review" | "payment" | "success">("review")
+  const [step, setStep] = useState<"review" | "delivery" | "payment" | "success">("review")
   const [isProcessing, setIsProcessing] = useState(false)
   const [receiptNumber, setReceiptNumber] = useState("")
   const [purchasedItems, setPurchasedItems] = useState<typeof items>([])
@@ -64,6 +64,16 @@ export function PaymentModal({
   const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string | null>(null)
   const [paymentMode, setPaymentMode] = useState<"saved" | "new">("new")
   const [saveNewCard, setSaveNewCard] = useState(false)
+
+  const [deliveryData, setDeliveryData] = useState({
+    fullName: "",
+    phone: "",
+    street: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    country: "USA",
+  })
 
   const [paymentData, setPaymentData] = useState({
     cardNumber: "",
@@ -96,8 +106,7 @@ export function PaymentModal({
           } else {
             setPaymentMode("new")
           }
-        } catch (e) {
-          console.error("[v0] Failed to load payment methods:", e)
+        } catch {
           setPaymentMode("new")
         }
       } else {
@@ -232,9 +241,7 @@ export function PaymentModal({
 
     setIsProcessing(true)
 
-    console.log("[v0] Items before storing:", items)
     setPurchasedItems([...items])
-    console.log("[v0] Purchased items set:", [...items])
 
     if (paymentMode === "new" && saveNewCard && paymentData.cardNumber && paymentData.cardholderName) {
       savePaymentMethod(paymentData)
@@ -262,12 +269,12 @@ export function PaymentModal({
         tax: tax,
         total: total,
         shippingAddress: {
-          name: paymentData.cardholderName || user.name || "Customer",
-          street: paymentData.billingAddress || "123 Main St",
-          city: paymentData.city || "New York",
-          state: "NY",
-          zipCode: paymentData.zipCode || "10001",
-          country: "USA",
+          name: deliveryData.fullName || user.name || "Customer",
+          street: deliveryData.street || "123 Main St",
+          city: deliveryData.city || "New York",
+          state: deliveryData.state || "NY",
+          zipCode: deliveryData.zipCode || "10001",
+          country: deliveryData.country || "USA",
         },
         appliedDiscounts: appliedDiscounts.map((d) => ({ code: d.discountCode, amount: d.discountAmount })),
         shippingMethod: shippingMethod
@@ -280,11 +287,7 @@ export function PaymentModal({
           : undefined,
       })
 
-      console.log("[v0] Order created:", newOrder.id)
-
       if (user.email) {
-        console.log("[v0] Sending payment confirmation email to:", user.email)
-
         const baseUrl =
           typeof window !== "undefined"
             ? window.location.origin
@@ -314,23 +317,16 @@ export function PaymentModal({
             }),
           })
 
-          const emailResult = await emailResponse.json()
-          if (emailResult.success) {
-            console.log("[v0] Payment confirmation email sent successfully")
-          } else {
-            console.error("[v0] Failed to send payment confirmation email:", emailResult.error)
-          }
-        } catch (emailError) {
-          console.error("[v0] Error sending payment confirmation email:", emailError)
+          await emailResponse.json()
+        } catch {
+          // Email sending failed silently
         }
       }
-    } catch (error) {
-      console.error("[v0] Error creating order:", error)
+    } catch {
+      // Order creation error handled silently
     }
 
     setStep("success")
-
-    console.log("[v0] Clearing cart after success step")
     clearCart()
     setIsProcessing(false)
   }
@@ -364,7 +360,7 @@ export function PaymentModal({
     }
 
     let receiptText = `
-EAZYBUY RECEIPT
+E-APPARELS RECEIPT
 ================
 Receipt #: ${receiptData.receiptNumber}
 Date: ${receiptData.date}
@@ -397,7 +393,7 @@ Total: $${receiptData.total}
 Payment Method: ${receiptData.paymentMethod}
 Status: ${receiptData.status}
 
-Thank you for shopping with EazyBuy!
+Thank you for shopping with E-Apparels!
 ================
     `
 
@@ -405,7 +401,7 @@ Thank you for shopping with EazyBuy!
     const url = window.URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
-    a.download = `EazyBuy-Receipt-${receiptNumber}.txt`
+    a.download = `E-Apparels-Receipt-${receiptNumber}.txt`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
@@ -454,7 +450,7 @@ Thank you for shopping with EazyBuy!
       <!DOCTYPE html>
       <html>
         <head>
-          <title>EazyBuy Receipt - ${receiptNumber}</title>
+          <title>E-Apparels Receipt - ${receiptNumber}</title>
           <style>
             body { font-family: monospace; max-width: 400px; margin: 0 auto; padding: 20px; }
             .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
@@ -467,7 +463,7 @@ Thank you for shopping with EazyBuy!
         </head>
         <body>
           <div class="header">
-            <h2>EAZYBUY RECEIPT</h2>
+            <h2>E-APPARELS RECEIPT</h2>
             <p>Receipt #: ${receiptNumber}</p>
             <p>${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</p>
           </div>
@@ -516,7 +512,7 @@ Thank you for shopping with EazyBuy!
           <div class="footer">
             <p>Payment Method: **** **** **** ${cardLast4}</p>
             <p>Status: PAID</p>
-            <p>Thank you for shopping with EazyBuy!</p>
+            <p>Thank you for shopping with E-Apparels!</p>
           </div>
         </body>
       </html>
@@ -531,6 +527,15 @@ Thank you for shopping with EazyBuy!
     setStep("review")
     setPurchasedItems([])
     setStockValidationError(null)
+    setDeliveryData({
+      fullName: "",
+      phone: "",
+      street: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      country: "USA",
+    })
     setPaymentData({
       cardNumber: "",
       expiryDate: "",
@@ -551,11 +556,6 @@ Thank you for shopping with EazyBuy!
   const displayTax = calculateTax(displaySubtotal - totalDiscountAmount)
   const displayTotal = displaySubtotal - totalDiscountAmount + displayTax + displayShippingCost
   const shippingMethod = getShippingMethodById(selectedShippingMethodId)
-
-  console.log("[v0] Display items:", displayItems)
-  console.log("[v0] Current step:", step)
-  console.log("[v0] Purchased items length:", purchasedItems.length)
-  console.log("[v0] Display calculations:", { displaySubtotal, displayTax, displayTotal, displayShippingCost })
 
   const isPaymentValid = () => {
     if (paymentMode === "saved") {
@@ -687,12 +687,116 @@ Thank you for shopping with EazyBuy!
                     <Button variant="outline" onClick={handleClose} className="flex-1 bg-transparent">
                       Back to Cart
                     </Button>
-                    <Button onClick={() => setStep("payment")} className="flex-1">
-                      Continue to Payment
+                    <Button onClick={() => setStep("delivery")} className="flex-1">
+                      Continue to Delivery
                     </Button>
                   </div>
                 </>
               )}
+            </div>
+          </>
+        ) : step === "delivery" ? (
+          <>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <FaTruck className="h-5 w-5" />
+                Delivery Information
+              </DialogTitle>
+            </DialogHeader>
+
+            <div className="space-y-4">
+              <Card>
+                <CardContent className="p-4 space-y-4">
+                  <div>
+                    <Label htmlFor="deliveryName">Full Name</Label>
+                    <Input
+                      id="deliveryName"
+                      placeholder="Enter your full name"
+                      value={deliveryData.fullName}
+                      onChange={(e) => setDeliveryData((prev) => ({ ...prev, fullName: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="deliveryPhone">Phone Number</Label>
+                    <Input
+                      id="deliveryPhone"
+                      type="tel"
+                      placeholder="Enter your phone number"
+                      value={deliveryData.phone}
+                      onChange={(e) => setDeliveryData((prev) => ({ ...prev, phone: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="deliveryStreet">Street Address</Label>
+                    <Input
+                      id="deliveryStreet"
+                      placeholder="123 Main Street"
+                      value={deliveryData.street}
+                      onChange={(e) => setDeliveryData((prev) => ({ ...prev, street: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="deliveryCity">City</Label>
+                      <Input
+                        id="deliveryCity"
+                        placeholder="New York"
+                        value={deliveryData.city}
+                        onChange={(e) => setDeliveryData((prev) => ({ ...prev, city: e.target.value }))}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="deliveryState">State/Province</Label>
+                      <Input
+                        id="deliveryState"
+                        placeholder="NY"
+                        value={deliveryData.state}
+                        onChange={(e) => setDeliveryData((prev) => ({ ...prev, state: e.target.value }))}
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="deliveryZip">ZIP / Postal Code</Label>
+                      <Input
+                        id="deliveryZip"
+                        placeholder="10001"
+                        value={deliveryData.zipCode}
+                        onChange={(e) => setDeliveryData((prev) => ({ ...prev, zipCode: e.target.value }))}
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="deliveryCountry">Country</Label>
+                      <Input
+                        id="deliveryCountry"
+                        placeholder="USA"
+                        value={deliveryData.country}
+                        onChange={(e) => setDeliveryData((prev) => ({ ...prev, country: e.target.value }))}
+                        required
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => setStep("review")} className="flex-1 bg-transparent">
+                  Back
+                </Button>
+                <Button
+                  onClick={() => setStep("payment")}
+                  className="flex-1"
+                  disabled={!deliveryData.fullName || !deliveryData.street || !deliveryData.city || !deliveryData.zipCode}
+                >
+                  Continue to Payment
+                </Button>
+              </div>
             </div>
           </>
         ) : step === "payment" ? (
@@ -912,7 +1016,7 @@ Thank you for shopping with EazyBuy!
                   </div>
 
                   <div className="flex gap-2">
-                    <Button variant="outline" onClick={() => setStep("review")} className="flex-1 bg-transparent">
+                    <Button variant="outline" onClick={() => setStep("delivery")} className="flex-1 bg-transparent">
                       Back
                     </Button>
                     <Button

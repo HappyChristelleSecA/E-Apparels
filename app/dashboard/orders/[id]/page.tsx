@@ -53,36 +53,6 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
   const [isProcessing, setIsProcessing] = useState(false)
 
   useEffect(() => {
-    console.log("[v0] Order Detail Page loaded")
-    console.log("[v0] Order ID:", params.id)
-    console.log("[v0] Order found:", order)
-
-    if (order) {
-      console.log("[v0] Order status:", order.status)
-      console.log("[v0] Order date:", order.orderDate)
-      console.log("[v0] Hours since order:", (Date.now() - order.orderDate.getTime()) / (1000 * 60 * 60))
-
-      const canCancel = canCancelOrder(order)
-      const canReturn = canReturnOrder(order)
-
-      console.log("[v0] Can cancel order:", canCancel)
-      console.log("[v0] Can return order:", canReturn)
-
-      if (canCancel) {
-        console.log("[v0] ✅ CANCEL BUTTON SHOULD BE VISIBLE")
-      } else {
-        console.log("[v0] ❌ Cancel button hidden - order too old or wrong status")
-      }
-
-      if (canReturn) {
-        console.log("[v0] ✅ RETURN BUTTON SHOULD BE VISIBLE")
-      } else {
-        console.log("[v0] ❌ Return button hidden - not delivered or too old")
-      }
-    }
-  }, [params.id, order])
-
-  useEffect(() => {
     if (!isLoading && (!isAuthenticated || !user)) {
       router.push("/auth")
     }
@@ -119,13 +89,10 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
   const handleCancelOrder = async () => {
     if (!order) return
 
-    console.log("[v0] Cancel order clicked for:", order.id)
     setIsProcessing(true)
     const success = cancelOrder(order.id, cancelReason)
-    console.log("[v0] Cancel order result:", success)
 
     if (success) {
-      console.log("[v0] Order cancelled successfully, refreshing data")
       setCancelDialogOpen(false)
       setCancelReason("")
       router.refresh()
@@ -136,17 +103,11 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
   const handleRequestReturn = async () => {
     if (!order) return
 
-    console.log("[v0] Return order clicked for:", order.id)
     setIsProcessing(true)
     const success = requestReturn(order.id, returnReason)
-    console.log("[v0] Return order result:", success)
 
     if (success) {
-      console.log("[v0] Return requested successfully, refreshing data")
-
       if (user?.email) {
-        console.log("[v0] Sending return request email to:", user.email)
-
         const baseUrl =
           typeof window !== "undefined"
             ? window.location.origin
@@ -174,14 +135,9 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
             }),
           })
 
-          const emailResult = await emailResponse.json()
-          if (emailResult.success) {
-            console.log("[v0] Return request email sent successfully")
-          } else {
-            console.error("[v0] Failed to send return request email:", emailResult.error)
-          }
-        } catch (emailError) {
-          console.error("[v0] Error sending return request email:", emailError)
+          await emailResponse.json()
+        } catch {
+          // Email sending failed silently
         }
       }
 
@@ -221,7 +177,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
         </head>
         <body>
           <div class="header">
-            <div class="company-name">EazyBuy</div>
+            <div class="company-name">E-Apparels</div>
             <div class="invoice-title">INVOICE</div>
           </div>
           
@@ -288,7 +244,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
           
           <div class="footer">
             <p>Thank you for your business!</p>
-            <p>For questions about this invoice, please contact support@eazybuy.com</p>
+            <p>For questions about this invoice, please contact support@e-apparels.com</p>
           </div>
         </body>
       </html>
@@ -341,7 +297,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
         </head>
         <body>
           <div class="header">
-            <div class="company-name">EazyBuy</div>
+            <div class="company-name">E-Apparels</div>
             <div class="order-title">ORDER DETAILS</div>
           </div>
           
@@ -448,7 +404,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                 </p>
               </div>
               <div className="flex items-center space-x-4">
-                <Badge className={getOrderStatusColor(order.status)} className="text-sm px-3 py-1">
+                <Badge className={`${getOrderStatusColor(order.status)} text-sm px-3 py-1`}>
                   {getOrderStatusText(order.status)}
                 </Badge>
                 <div className="text-right">
@@ -584,10 +540,6 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                   <Button
                     variant="outline"
                     className="flex items-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50 bg-transparent border-red-300"
-                    onClick={() => {
-                      console.log("[v0] Cancel button clicked!")
-                      alert("Cancel Order button clicked! This order can be cancelled.")
-                    }}
                   >
                     <FaTimes className="h-4 w-4" />
                     Cancel Order
@@ -631,10 +583,6 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                   <Button
                     variant="outline"
                     className="flex items-center gap-2 text-orange-600 hover:text-orange-700 hover:bg-orange-50 bg-transparent border-orange-300"
-                    onClick={() => {
-                      console.log("[v0] Return button clicked!")
-                      alert("Return Order button clicked! This order can be returned.")
-                    }}
                   >
                     <FaUndo className="h-4 w-4" />
                     Return Order
@@ -673,18 +621,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
               </Dialog>
             )}
 
-            {order && !canCancelOrder(order) && !canReturnOrder(order) && (
-              <div className="text-sm text-muted-foreground bg-gray-50 p-3 rounded border">
-                <p>
-                  <strong>Debug Info:</strong>
-                </p>
-                <p>• Order Status: {order.status}</p>
-                <p>• Order Date: {order.orderDate.toLocaleDateString()}</p>
-                <p>• Hours since order: {Math.round((Date.now() - order.orderDate.getTime()) / (1000 * 60 * 60))}</p>
-                <p>• Can Cancel: {canCancelOrder(order) ? "Yes" : "No (need pending/processing status within 24h)"}</p>
-                <p>• Can Return: {canReturnOrder(order) ? "Yes" : "No (need delivered status within 30 days)"}</p>
-              </div>
-            )}
+
           </CardContent>
         </Card>
       </div>

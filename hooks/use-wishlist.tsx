@@ -16,6 +16,7 @@ import { useAuth } from "@/hooks/use-auth"
 interface WishlistContextType {
   items: WishlistItem[]
   itemCount: number
+  isLoaded: boolean
   addToWishlist: (product: Product) => void
   removeFromWishlist: (productId: string) => void
   isInWishlist: (productId: string) => boolean
@@ -69,6 +70,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
       value={{
         items,
         itemCount: items.length,
+        isLoaded,
         addToWishlist,
         removeFromWishlist,
         isInWishlist,

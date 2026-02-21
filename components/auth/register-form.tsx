@@ -18,6 +18,7 @@ interface RegisterFormProps {
 
 export function RegisterForm({ onToggleMode }: RegisterFormProps) {
   const [name, setName] = useState("")
+  const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -33,6 +34,11 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
     setError("")
     setShowAccountExistsPopup(false)
 
+    if (!phone.trim()) {
+      setError("Phone number is required")
+      return
+    }
+
     if (password !== confirmPassword) {
       setError("Passwords do not match")
       return
@@ -43,7 +49,7 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
       return
     }
 
-    const result = await register(email, password, name)
+    const result = await register(email, password, name, phone)
     if (result.success) {
       setRegisteredEmail(email)
       setShowSuccessMessage(true)
@@ -75,7 +81,7 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
             </svg>
           </div>
           <CardTitle className="text-2xl font-bold">Account Created Successfully!</CardTitle>
-          <CardDescription>Welcome to EazyBuy! Your account has been created for {registeredEmail}</CardDescription>
+          <CardDescription>Welcome to E-Apparels! Your account has been created for {registeredEmail}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4 text-center">
@@ -93,7 +99,7 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
-        <CardDescription>Join EazyBuy today</CardDescription>
+        <CardDescription>Join E-Apparels today</CardDescription>
       </CardHeader>
       <CardContent>
         {showAccountExistsPopup && (
@@ -130,6 +136,17 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
               placeholder="Enter your full name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="phone">Phone Number</Label>
+            <Input
+              id="phone"
+              type="tel"
+              placeholder="Enter your phone number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               required
             />
           </div>

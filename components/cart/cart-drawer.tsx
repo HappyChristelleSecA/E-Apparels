@@ -10,14 +10,14 @@ import Image from "next/image"
 import Link from "next/link"
 
 export function CartDrawer() {
-  const { items, total, itemCount, isOpen, toggleCart, updateQuantity, removeFromCart } = useCart()
+  const { items, total, itemCount, isOpen, isLoaded, toggleCart, updateQuantity, removeFromCart } = useCart()
 
   return (
     <Sheet open={isOpen} onOpenChange={toggleCart}>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="relative">
           <FaShoppingCart className="h-5 w-5" />
-          {itemCount > 0 && (
+          {isLoaded && itemCount > 0 && (
             <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs">
               {itemCount}
             </Badge>
