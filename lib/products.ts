@@ -90,7 +90,7 @@ export const products: Product[] = [
     category: "Electronics",
     image: "/images/products/smartwatch.jpg",
     images: ["/images/products/smartwatch.jpg"],
-    rating: 4.3,
+    rating: 3.8,
     reviewCount: 89,
     inStock: true,
     featured: true,
@@ -137,7 +137,7 @@ export const products: Product[] = [
     category: "Home & Garden",
     image: "/images/products/lamp.jpg",
     images: ["/images/products/lamp.jpg"],
-    rating: 4.2,
+    rating: 3.2,
     reviewCount: 56,
     inStock: true,
     featured: false,
@@ -207,7 +207,7 @@ export const products: Product[] = [
     category: "Electronics",
     image: "/images/products/charger.jpg",
     images: ["/images/products/charger.jpg"],
-    rating: 4.1,
+    rating: 2.8,
     reviewCount: 67,
     inStock: true,
     featured: false,
@@ -230,7 +230,7 @@ export const products: Product[] = [
     category: "Fashion",
     image: "/images/products/sunglasses.jpg",
     images: ["/images/products/sunglasses.jpg"],
-    rating: 4.4,
+    rating: 3.5,
     reviewCount: 91,
     inStock: false,
     featured: false,
@@ -301,7 +301,7 @@ export const products: Product[] = [
     category: "Electronics",
     image: "/images/products/securitycam.jpg",
     images: ["/images/products/securitycam.jpg"],
-    rating: 4.4,
+    rating: 2.5,
     reviewCount: 234,
     inStock: true,
     featured: false,
@@ -441,7 +441,7 @@ export const products: Product[] = [
     category: "Home & Garden",
     image: "/images/products/plants.jpg",
     images: ["/images/products/plants.jpg"],
-    rating: 4.3,
+    rating: 1.8,
     reviewCount: 198,
     inStock: true,
     featured: false,
@@ -465,7 +465,7 @@ export const products: Product[] = [
     category: "Sports",
     image: "/images/products/resistancebands.jpg",
     images: ["/images/products/resistancebands.jpg"],
-    rating: 4.4,
+    rating: 3.0,
     reviewCount: 156,
     inStock: true,
     featured: false,
@@ -533,7 +533,7 @@ let allProductsCache: Product[] | null = null
 
 // Bump this version whenever product data (images, names, etc.) changes in source code.
 // This forces localStorage to discard stale cached products.
-const PRODUCTS_DATA_VERSION = "5"
+const PRODUCTS_DATA_VERSION = "6"
 
 export const getAllProducts = (): Product[] => {
   if (typeof window !== "undefined" && allProductsCache === null) {
