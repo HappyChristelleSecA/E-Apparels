@@ -57,7 +57,9 @@ export default function ProductsPage() {
     }
 
     // Apply filters
+    console.log("[v0] Applying filters:", filters, "to", result.length, "products")
     result = filterProducts(result, filters)
+    console.log("[v0] After filtering:", result.length, "products")
 
     // Apply sorting
     result = sortProducts(result, sortBy)
@@ -66,6 +68,7 @@ export default function ProductsPage() {
   }
 
   const handleFiltersChange = (filters: any) => {
+    console.log("[v0] handleFiltersChange called with filters:", filters)
     setCurrentFilters(filters)
     updateProducts(searchQuery, filters)
   }
