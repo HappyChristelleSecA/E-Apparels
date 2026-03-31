@@ -78,6 +78,7 @@ export const products: Product[] = [
     colors: ["Black", "White", "Silver"],
     createdAt: "2023-01-01",
     visible: true,
+    gender: "Unisex",
   },
   {
     id: "2",
@@ -98,6 +99,7 @@ export const products: Product[] = [
     colors: ["Black", "Silver", "Rose Gold"],
     createdAt: "2023-01-02",
     visible: true,
+    gender: "Unisex",
   },
   {
     id: "3",
@@ -119,6 +121,7 @@ export const products: Product[] = [
     colors: ["White", "Black", "Gray", "Navy", "Red"],
     createdAt: "2023-01-03",
     visible: true,
+    gender: "Unisex",
   },
   {
     id: "4",
@@ -139,6 +142,7 @@ export const products: Product[] = [
     colors: ["White", "Black", "Gold"],
     createdAt: "2023-01-04",
     visible: true,
+    gender: "Unisex",
   },
   {
     id: "5",
@@ -159,6 +163,7 @@ export const products: Product[] = [
     colors: ["Purple", "Blue", "Pink", "Green", "Black"],
     createdAt: "2023-01-05",
     visible: true,
+    gender: "Unisex",
   },
   {
     id: "6",
@@ -179,6 +184,7 @@ export const products: Product[] = [
     colors: ["Yellow"],
     createdAt: "2023-01-06",
     visible: true,
+    gender: "Unisex",
   },
   {
     id: "7",
@@ -200,6 +206,7 @@ export const products: Product[] = [
     colors: ["Black", "White"],
     createdAt: "2023-01-07",
     visible: true,
+    gender: "Unisex",
   },
   {
     id: "8",
@@ -220,6 +227,7 @@ export const products: Product[] = [
     colors: ["Brown", "Black", "Gold"],
     createdAt: "2023-01-08",
     visible: true,
+    gender: "Women",
   },
   {
     id: "9",
@@ -241,6 +249,7 @@ export const products: Product[] = [
     colors: ["Black"],
     createdAt: "2023-01-09",
     visible: true,
+    gender: "Unisex",
   },
   {
     id: "10",
@@ -262,6 +271,7 @@ export const products: Product[] = [
     colors: ["Brown", "Black", "Tan"],
     createdAt: "2023-01-10",
     visible: true,
+    gender: "Women",
   },
   {
     id: "11",
@@ -282,6 +292,7 @@ export const products: Product[] = [
     colors: ["White", "Black"],
     createdAt: "2023-01-11",
     visible: true,
+    gender: "Unisex",
   },
   {
     id: "12",
@@ -303,6 +314,7 @@ export const products: Product[] = [
     colors: ["Black", "Gray", "White"],
     createdAt: "2023-01-12",
     visible: true,
+    gender: "Unisex",
   },
   {
     id: "13",
@@ -323,6 +335,7 @@ export const products: Product[] = [
     colors: ["Red", "Blue", "Black"],
     createdAt: "2023-01-13",
     visible: true,
+    gender: "Unisex",
   },
   {
     id: "14",
@@ -343,6 +356,7 @@ export const products: Product[] = [
     colors: ["Brown"],
     createdAt: "2023-01-14",
     visible: true,
+    gender: "Unisex",
   },
   {
     id: "15",
@@ -364,6 +378,7 @@ export const products: Product[] = [
     colors: ["Black", "White"],
     createdAt: "2023-01-15",
     visible: true,
+    gender: "Unisex",
   },
   {
     id: "16",
@@ -384,6 +399,7 @@ export const products: Product[] = [
     colors: ["Blue", "Red", "Green", "Purple"],
     createdAt: "2023-01-16",
     visible: true,
+    gender: "Women",
   },
   {
     id: "17",
@@ -404,6 +420,7 @@ export const products: Product[] = [
     colors: ["Green"],
     createdAt: "2023-01-17",
     visible: true,
+    gender: "Unisex",
   },
   {
     id: "18",
@@ -425,6 +442,7 @@ export const products: Product[] = [
     colors: ["Multi", "Black", "Red"],
     createdAt: "2023-01-18",
     visible: true,
+    gender: "Unisex",
   },
   {
     id: "19",
@@ -445,6 +463,7 @@ export const products: Product[] = [
     colors: ["Gold", "Silver"],
     createdAt: "2023-01-19",
     visible: true,
+    gender: "Unisex",
   },
   {
     id: "20",
@@ -466,6 +485,7 @@ export const products: Product[] = [
     colors: ["Wood", "Black", "White"],
     createdAt: "2023-01-20",
     visible: true,
+    gender: "Unisex",
   },
 ]
 
@@ -619,6 +639,7 @@ export const getFilterCounts = (baseProducts: Product[] = getVisibleProducts()) 
       "1+": 0,
     },
     colors: {} as Record<string, number>,
+    genders: {} as Record<string, number>,
     inStock: 0,
     onSale: 0,
     outOfOrder: 0,
