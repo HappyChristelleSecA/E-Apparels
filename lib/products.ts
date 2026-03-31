@@ -78,7 +78,7 @@ export const products: Product[] = [
     colors: ["Black", "White", "Silver"],
     createdAt: "2023-01-01",
     visible: true,
-    gender: "Unisex",
+    gender: "Man",
   },
   {
     id: "2",
@@ -99,7 +99,7 @@ export const products: Product[] = [
     colors: ["Black", "Silver", "Rose Gold"],
     createdAt: "2023-01-02",
     visible: true,
-    gender: "Unisex",
+    gender: "Man",
   },
   {
     id: "3",
@@ -121,7 +121,7 @@ export const products: Product[] = [
     colors: ["White", "Black", "Gray", "Navy", "Red"],
     createdAt: "2023-01-03",
     visible: true,
-    gender: "Unisex",
+    gender: "Woman",
   },
   {
     id: "4",
@@ -142,7 +142,7 @@ export const products: Product[] = [
     colors: ["White", "Black", "Gold"],
     createdAt: "2023-01-04",
     visible: true,
-    gender: "Unisex",
+    gender: "Man",
   },
   {
     id: "5",
@@ -163,7 +163,7 @@ export const products: Product[] = [
     colors: ["Purple", "Blue", "Pink", "Green", "Black"],
     createdAt: "2023-01-05",
     visible: true,
-    gender: "Unisex",
+    gender: "Woman",
   },
   {
     id: "6",
@@ -184,7 +184,7 @@ export const products: Product[] = [
     colors: ["Yellow"],
     createdAt: "2023-01-06",
     visible: true,
-    gender: "Unisex",
+    gender: "Man",
   },
   {
     id: "7",
@@ -206,7 +206,7 @@ export const products: Product[] = [
     colors: ["Black", "White"],
     createdAt: "2023-01-07",
     visible: true,
-    gender: "Unisex",
+    gender: "Woman",
   },
   {
     id: "8",
@@ -249,7 +249,7 @@ export const products: Product[] = [
     colors: ["Black"],
     createdAt: "2023-01-09",
     visible: true,
-    gender: "Unisex",
+    gender: "Man",
   },
   {
     id: "10",
@@ -292,7 +292,7 @@ export const products: Product[] = [
     colors: ["White", "Black"],
     createdAt: "2023-01-11",
     visible: true,
-    gender: "Unisex",
+    gender: "Man",
   },
   {
     id: "12",
@@ -314,7 +314,7 @@ export const products: Product[] = [
     colors: ["Black", "Gray", "White"],
     createdAt: "2023-01-12",
     visible: true,
-    gender: "Unisex",
+    gender: "Woman",
   },
   {
     id: "13",
@@ -335,7 +335,7 @@ export const products: Product[] = [
     colors: ["Red", "Blue", "Black"],
     createdAt: "2023-01-13",
     visible: true,
-    gender: "Unisex",
+    gender: "Man",
   },
   {
     id: "14",
@@ -356,7 +356,7 @@ export const products: Product[] = [
     colors: ["Brown"],
     createdAt: "2023-01-14",
     visible: true,
-    gender: "Unisex",
+    gender: "Woman",
   },
   {
     id: "15",
@@ -378,7 +378,7 @@ export const products: Product[] = [
     colors: ["Black", "White"],
     createdAt: "2023-01-15",
     visible: true,
-    gender: "Unisex",
+    gender: "Man",
   },
   {
     id: "16",
@@ -420,7 +420,7 @@ export const products: Product[] = [
     colors: ["Green"],
     createdAt: "2023-01-17",
     visible: true,
-    gender: "Unisex",
+    gender: "Man",
   },
   {
     id: "18",
@@ -442,7 +442,7 @@ export const products: Product[] = [
     colors: ["Multi", "Black", "Red"],
     createdAt: "2023-01-18",
     visible: true,
-    gender: "Unisex",
+    gender: "Woman",
   },
   {
     id: "19",
@@ -463,7 +463,7 @@ export const products: Product[] = [
     colors: ["Gold", "Silver"],
     createdAt: "2023-01-19",
     visible: true,
-    gender: "Unisex",
+    gender: "Man",
   },
   {
     id: "20",
@@ -485,7 +485,7 @@ export const products: Product[] = [
     colors: ["Wood", "Black", "White"],
     createdAt: "2023-01-20",
     visible: true,
-    gender: "Unisex",
+    gender: "Man",
   },
 ]
 
@@ -493,7 +493,7 @@ let allProductsCache: Product[] | null = null
 
 // Bump this version whenever product data (images, names, etc.) changes in source code.
 // This forces localStorage to discard stale cached products.
-const PRODUCTS_DATA_VERSION = "2"
+const PRODUCTS_DATA_VERSION = "3"
 
 export const getAllProducts = (): Product[] => {
   if (typeof window !== "undefined" && allProductsCache === null) {
