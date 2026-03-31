@@ -22,6 +22,8 @@ interface ProductFiltersProps {
     onSale?: boolean
     color?: string
     gender?: string
+    size?: string
+    brand?: string
   }) => void
   onSearchChange: (query: string) => void
   totalProducts?: number
@@ -44,6 +46,8 @@ export function ProductFilters({
     onSale: false,
     color: "all",
     gender: "all",
+    size: "all",
+    brand: "all",
   })
   const [searchQuery, setSearchQuery] = useState("")
   const [filterCounts, setFilterCounts] = useState<any>({})
@@ -67,6 +71,8 @@ export function ProductFilters({
     if (newFilters.onSale) processedFilters.onSale = newFilters.onSale
     if (newFilters.color !== "all") processedFilters.color = newFilters.color
     if (newFilters.gender !== "all") processedFilters.gender = newFilters.gender
+    if (newFilters.size !== "all") processedFilters.size = newFilters.size
+    if (newFilters.brand !== "all") processedFilters.brand = newFilters.brand
 
     onFiltersChange(processedFilters)
   }
@@ -86,6 +92,8 @@ export function ProductFilters({
       onSale: false,
       color: "all",
       gender: "all",
+      size: "all",
+      brand: "all",
     }
     setFilters(clearedFilters)
     setSearchQuery("")
@@ -105,6 +113,11 @@ export function ProductFilters({
 
   const availableColors = Object.keys(filterCounts.colors || {}).sort()
   const availableGenders = Object.keys(filterCounts.genders || {}).sort()
+  const availableSizes = Object.keys(filterCounts.sizes || {}).sort((a, b) => {
+    const sizeOrder = ["XS", "S", "M", "L", "XL", "XXL", "One Size"]
+    return sizeOrder.indexOf(a) - sizeOrder.indexOf(b)
+  })
+  const availableBrands = Object.keys(filterCounts.brands || {}).sort()
 
   const availableCategories =
     filteredProducts.length > 0 ? [...new Set(filteredProducts.map((p) => p.category).filter(Boolean))] : []
@@ -193,6 +206,60 @@ export function ProductFilters({
                         {filterCounts.genders?.[gender] && (
                           <Badge variant="secondary" className="ml-2 text-xs">
                             {filterCounts.genders[gender]}
+                          </Badge>
+                        )}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          {/* Size Filter */}
+          {availableSizes.length > 0 && (
+            <div className="space-y-2">
+              <Label>Size</Label>
+              <Select value={filters.size} onValueChange={(value) => handleFilterChange("size", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All Sizes" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Sizes</SelectItem>
+                  {availableSizes.map((size) => (
+                    <SelectItem key={size} value={size}>
+                      <div className="flex items-center justify-between w-full">
+                        <span>{size}</span>
+                        {filterCounts.sizes?.[size] && (
+                          <Badge variant="secondary" className="ml-2 text-xs">
+                            {filterCounts.sizes[size]}
+                          </Badge>
+                        )}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          {/* Brand Filter */}
+          {availableBrands.length > 0 && (
+            <div className="space-y-2">
+              <Label>Brand</Label>
+              <Select value={filters.brand} onValueChange={(value) => handleFilterChange("brand", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All Brands" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Brands</SelectItem>
+                  {availableBrands.map((brand) => (
+                    <SelectItem key={brand} value={brand}>
+                      <div className="flex items-center justify-between w-full">
+                        <span>{brand}</span>
+                        {filterCounts.brands?.[brand] && (
+                          <Badge variant="secondary" className="ml-2 text-xs">
+                            {filterCounts.brands[brand]}
                           </Badge>
                         )}
                       </div>
