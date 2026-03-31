@@ -17,6 +17,7 @@ export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [highlightTerm, setHighlightTerm] = useState("")
+  const [currentFilters, setCurrentFilters] = useState<any>({})
 
   useEffect(() => {
     const loadProducts = () => {
@@ -43,7 +44,7 @@ export default function ProductsPage() {
     }
   }, [])
 
-  const updateProducts = (query: string = searchQuery, filters: any = {}) => {
+  const updateProducts = (query: string = searchQuery, filters: any = currentFilters) => {
     let result = allProducts
 
     // Apply search with enhanced functionality
@@ -65,12 +66,13 @@ export default function ProductsPage() {
   }
 
   const handleFiltersChange = (filters: any) => {
+    setCurrentFilters(filters)
     updateProducts(searchQuery, filters)
   }
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query)
-    updateProducts(query)
+    updateProducts(query, currentFilters)
   }
 
   const handleSortChange = (value: string) => {
