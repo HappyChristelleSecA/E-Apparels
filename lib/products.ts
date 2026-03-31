@@ -78,6 +78,9 @@ export const products: Product[] = [
     colors: ["Black", "White", "Silver"],
     createdAt: "2023-01-01",
     visible: true,
+    gender: "Men",
+    brand: "SoundMax",
+    sizes: ["One Size"],
   },
   {
     id: "2",
@@ -98,6 +101,9 @@ export const products: Product[] = [
     colors: ["Black", "Silver", "Rose Gold"],
     createdAt: "2023-01-02",
     visible: true,
+    gender: "Men",
+    brand: "FitTech",
+    sizes: ["S", "M", "L"],
   },
   {
     id: "3",
@@ -119,6 +125,9 @@ export const products: Product[] = [
     colors: ["White", "Black", "Gray", "Navy", "Red"],
     createdAt: "2023-01-03",
     visible: true,
+    gender: "Women",
+    brand: "EcoWear",
+    sizes: ["XS", "S", "M", "L", "XL"],
   },
   {
     id: "4",
@@ -139,6 +148,9 @@ export const products: Product[] = [
     colors: ["White", "Black", "Gold"],
     createdAt: "2023-01-04",
     visible: true,
+    gender: "Men",
+    brand: "LumiHome",
+    sizes: ["One Size"],
   },
   {
     id: "5",
@@ -159,6 +171,9 @@ export const products: Product[] = [
     colors: ["Purple", "Blue", "Pink", "Green", "Black"],
     createdAt: "2023-01-05",
     visible: true,
+    gender: "Women",
+    brand: "ZenFit",
+    sizes: ["One Size"],
   },
   {
     id: "6",
@@ -179,6 +194,9 @@ export const products: Product[] = [
     colors: ["Yellow"],
     createdAt: "2023-01-06",
     visible: true,
+    gender: "Men",
+    brand: "TechPress",
+    sizes: ["One Size"],
   },
   {
     id: "7",
@@ -200,6 +218,9 @@ export const products: Product[] = [
     colors: ["Black", "White"],
     createdAt: "2023-01-07",
     visible: true,
+    gender: "Women",
+    brand: "PowerUp",
+    sizes: ["One Size"],
   },
   {
     id: "8",
@@ -220,6 +241,9 @@ export const products: Product[] = [
     colors: ["Brown", "Black", "Gold"],
     createdAt: "2023-01-08",
     visible: true,
+    gender: "Women",
+    brand: "VisionLux",
+    sizes: ["One Size"],
   },
   {
     id: "9",
@@ -241,6 +265,9 @@ export const products: Product[] = [
     colors: ["Black"],
     createdAt: "2023-01-09",
     visible: true,
+    gender: "Men",
+    brand: "OptiPro",
+    sizes: ["One Size"],
   },
   {
     id: "10",
@@ -262,6 +289,9 @@ export const products: Product[] = [
     colors: ["Brown", "Black", "Tan"],
     createdAt: "2023-01-10",
     visible: true,
+    gender: "Women",
+    brand: "LuxeStyle",
+    sizes: ["S", "M", "L"],
   },
   {
     id: "11",
@@ -282,6 +312,9 @@ export const products: Product[] = [
     colors: ["White", "Black"],
     createdAt: "2023-01-11",
     visible: true,
+    gender: "Men",
+    brand: "SecureView",
+    sizes: ["One Size"],
   },
   {
     id: "12",
@@ -303,6 +336,9 @@ export const products: Product[] = [
     colors: ["Black", "Gray", "White"],
     createdAt: "2023-01-12",
     visible: true,
+    gender: "Women",
+    brand: "ErgoMax",
+    sizes: ["One Size"],
   },
   {
     id: "13",
@@ -323,6 +359,9 @@ export const products: Product[] = [
     colors: ["Red", "Blue", "Black"],
     createdAt: "2023-01-13",
     visible: true,
+    gender: "Men",
+    brand: "ProServe",
+    sizes: ["One Size"],
   },
   {
     id: "14",
@@ -343,6 +382,9 @@ export const products: Product[] = [
     colors: ["Brown"],
     createdAt: "2023-01-14",
     visible: true,
+    gender: "Women",
+    brand: "ChocoLux",
+    sizes: ["One Size"],
   },
   {
     id: "15",
@@ -364,6 +406,9 @@ export const products: Product[] = [
     colors: ["Black", "White"],
     createdAt: "2023-01-15",
     visible: true,
+    gender: "Men",
+    brand: "KeyMaster",
+    sizes: ["One Size"],
   },
   {
     id: "16",
@@ -384,6 +429,9 @@ export const products: Product[] = [
     colors: ["Blue", "Red", "Green", "Purple"],
     createdAt: "2023-01-16",
     visible: true,
+    gender: "Women",
+    brand: "SilkArt",
+    sizes: ["One Size"],
   },
   {
     id: "17",
@@ -404,6 +452,9 @@ export const products: Product[] = [
     colors: ["Green"],
     createdAt: "2023-01-17",
     visible: true,
+    gender: "Men",
+    brand: "GreenLife",
+    sizes: ["One Size"],
   },
   {
     id: "18",
@@ -425,6 +476,9 @@ export const products: Product[] = [
     colors: ["Multi", "Black", "Red"],
     createdAt: "2023-01-18",
     visible: true,
+    gender: "Women",
+    brand: "FlexFit",
+    sizes: ["One Size"],
   },
   {
     id: "19",
@@ -445,6 +499,9 @@ export const products: Product[] = [
     colors: ["Gold", "Silver"],
     createdAt: "2023-01-19",
     visible: true,
+    gender: "Men",
+    brand: "GiftPro",
+    sizes: ["One Size"],
   },
   {
     id: "20",
@@ -466,6 +523,9 @@ export const products: Product[] = [
     colors: ["Wood", "Black", "White"],
     createdAt: "2023-01-20",
     visible: true,
+    gender: "Men",
+    brand: "RetroSound",
+    sizes: ["One Size"],
   },
 ]
 
@@ -473,7 +533,7 @@ let allProductsCache: Product[] | null = null
 
 // Bump this version whenever product data (images, names, etc.) changes in source code.
 // This forces localStorage to discard stale cached products.
-const PRODUCTS_DATA_VERSION = "2"
+const PRODUCTS_DATA_VERSION = "5"
 
 export const getAllProducts = (): Product[] => {
   if (typeof window !== "undefined" && allProductsCache === null) {
@@ -619,6 +679,9 @@ export const getFilterCounts = (baseProducts: Product[] = getVisibleProducts()) 
       "1+": 0,
     },
     colors: {} as Record<string, number>,
+    genders: {} as Record<string, number>,
+    sizes: {} as Record<string, number>,
+    brands: {} as Record<string, number>,
     inStock: 0,
     onSale: 0,
     outOfOrder: 0,
@@ -650,6 +713,23 @@ export const getFilterCounts = (baseProducts: Product[] = getVisibleProducts()) 
     if (product.rating >= 2) counts.ratings["2+"]++
     if (product.rating >= 1) counts.ratings["1+"]++
 
+    // Gender counts
+    if (product.gender) {
+      counts.genders[product.gender] = (counts.genders[product.gender] || 0) + 1
+    }
+
+    // Size counts
+    if (product.sizes) {
+      product.sizes.forEach((size) => {
+        counts.sizes[size] = (counts.sizes[size] || 0) + 1
+      })
+    }
+
+    // Brand counts
+    if (product.brand) {
+      counts.brands[product.brand] = (counts.brands[product.brand] || 0) + 1
+    }
+
     // Stock and sale counts
     if (product.inStock) counts.inStock++
     if (product.originalPrice && product.originalPrice > product.price) counts.onSale++
@@ -669,6 +749,9 @@ export const filterProducts = (
     minRating?: number
     outOfOrder?: boolean
     color?: string
+    gender?: string
+    size?: string
+    brand?: string
   },
 ): Product[] => {
   return products.filter((product) => {
@@ -684,6 +767,18 @@ export const filterProducts = (
       const hasColor = product.colors ? product.colors.includes(filters.color) : product.color === filters.color
       if (!hasColor) return false
     }
+
+    // Gender filtering logic
+    if (filters.gender && product.gender !== filters.gender) return false
+
+    // Size filtering logic
+    if (filters.size) {
+      const hasSize = product.sizes ? product.sizes.includes(filters.size) : false
+      if (!hasSize) return false
+    }
+
+    // Brand filtering logic
+    if (filters.brand && product.brand !== filters.brand) return false
 
     return true
   })

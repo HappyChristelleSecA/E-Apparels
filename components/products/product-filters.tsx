@@ -21,6 +21,9 @@ interface ProductFiltersProps {
     minRating?: number
     onSale?: boolean
     color?: string
+    gender?: string
+    size?: string
+    brand?: string
   }) => void
   onSearchChange: (query: string) => void
   totalProducts?: number
@@ -42,6 +45,9 @@ export function ProductFilters({
     minRating: "any",
     onSale: false,
     color: "all",
+    gender: "all",
+    size: "all",
+    brand: "all",
   })
   const [searchQuery, setSearchQuery] = useState("")
   const [filterCounts, setFilterCounts] = useState<any>({})
@@ -64,6 +70,9 @@ export function ProductFilters({
     if (newFilters.minRating !== "any") processedFilters.minRating = Number.parseFloat(newFilters.minRating)
     if (newFilters.onSale) processedFilters.onSale = newFilters.onSale
     if (newFilters.color !== "all") processedFilters.color = newFilters.color
+    if (newFilters.gender !== "all") processedFilters.gender = newFilters.gender
+    if (newFilters.size !== "all") processedFilters.size = newFilters.size
+    if (newFilters.brand !== "all") processedFilters.brand = newFilters.brand
 
     onFiltersChange(processedFilters)
   }
@@ -82,6 +91,9 @@ export function ProductFilters({
       minRating: "any",
       onSale: false,
       color: "all",
+      gender: "all",
+      size: "all",
+      brand: "all",
     }
     setFilters(clearedFilters)
     setSearchQuery("")
@@ -100,6 +112,12 @@ export function ProductFilters({
   ).length
 
   const availableColors = Object.keys(filterCounts.colors || {}).sort()
+  const availableGenders = Object.keys(filterCounts.genders || {}).sort()
+  const availableSizes = Object.keys(filterCounts.sizes || {}).sort((a, b) => {
+    const sizeOrder = ["XS", "S", "M", "L", "XL", "XXL", "One Size"]
+    return sizeOrder.indexOf(a) - sizeOrder.indexOf(b)
+  })
+  const availableBrands = Object.keys(filterCounts.brands || {}).sort()
 
   const availableCategories =
     filteredProducts.length > 0 ? [...new Set(filteredProducts.map((p) => p.category).filter(Boolean))] : []
@@ -146,67 +164,26 @@ export function ProductFilters({
           </Button>
         </CardHeader>
         <CardContent className="space-y-4">
-          {/* Category Filter */}
-          <div className="space-y-2">
-            <Label>Category</Label>
-            <Select value={filters.category} onValueChange={(value) => handleFilterChange("category", value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="All Categories" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                {availableCategories.map((category) => (
-                  <SelectItem key={category} value={category}>
-                    <div className="flex items-center justify-between w-full">
-                      <span>{category}</span>
-                      {filterCounts.categories?.[category] && (
-                        <Badge variant="secondary" className="ml-2 text-xs">
-                          {filterCounts.categories[category]}
-                        </Badge>
-                      )}
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {availableColors.length > 0 && (
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2">
-                <FaPalette className="h-4 w-4" />
-                Color
-              </Label>
-              <Select value={filters.color} onValueChange={(value) => handleFilterChange("color", value)}>
+          {/* Category Section - Contains Gender, Size, Brand, Color */}
+          <div className="space-y-3">
+            <Label className="text-base font-semibold">Category</Label>
+            
+            {/* Product Category */}
+            <div className="space-y-1">
+              <Label className="text-sm text-muted-foreground">Product Type</Label>
+              <Select value={filters.category} onValueChange={(value) => handleFilterChange("category", value)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="All Colors" />
+                  <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Colors</SelectItem>
-                  {availableColors.map((color) => (
-                    <SelectItem key={color} value={color}>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  {availableCategories.map((category) => (
+                    <SelectItem key={category} value={category}>
                       <div className="flex items-center justify-between w-full">
-                        <div className="flex items-center space-x-2">
-                          <div
-                            className="w-4 h-4 rounded-full border border-gray-300"
-                            style={{
-                              backgroundColor:
-                                color.toLowerCase() === "multi"
-                                  ? "linear-gradient(45deg, red, blue, green)"
-                                  : color.toLowerCase() === "wood"
-                                    ? "#8B4513"
-                                    : color.toLowerCase() === "rose gold"
-                                      ? "#E8B4B8"
-                                      : color.toLowerCase() === "tan"
-                                        ? "#D2B48C"
-                                        : color.toLowerCase(),
-                            }}
-                          />
-                          <span>{color}</span>
-                        </div>
-                        {filterCounts.colors?.[color] && (
+                        <span>{category}</span>
+                        {filterCounts.categories?.[category] && (
                           <Badge variant="secondary" className="ml-2 text-xs">
-                            {filterCounts.colors[color]}
+                            {filterCounts.categories[category]}
                           </Badge>
                         )}
                       </div>
@@ -215,7 +192,135 @@ export function ProductFilters({
                 </SelectContent>
               </Select>
             </div>
-          )}
+
+            {/* Gender */}
+            {availableGenders.length > 0 && (
+              <div className="space-y-1">
+                <Label className="text-sm text-muted-foreground">Gender</Label>
+                <Select value={filters.gender} onValueChange={(value) => handleFilterChange("gender", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="All Genders" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Genders</SelectItem>
+                    {availableGenders.map((gender) => (
+                      <SelectItem key={gender} value={gender}>
+                        <div className="flex items-center justify-between w-full">
+                          <span>{gender}</span>
+                          {filterCounts.genders?.[gender] && (
+                            <Badge variant="secondary" className="ml-2 text-xs">
+                              {filterCounts.genders[gender]}
+                            </Badge>
+                          )}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {/* Size */}
+            {availableSizes.length > 0 && (
+              <div className="space-y-1">
+                <Label className="text-sm text-muted-foreground">Size</Label>
+                <Select value={filters.size} onValueChange={(value) => handleFilterChange("size", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="All Sizes" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Sizes</SelectItem>
+                    {availableSizes.map((size) => (
+                      <SelectItem key={size} value={size}>
+                        <div className="flex items-center justify-between w-full">
+                          <span>{size}</span>
+                          {filterCounts.sizes?.[size] && (
+                            <Badge variant="secondary" className="ml-2 text-xs">
+                              {filterCounts.sizes[size]}
+                            </Badge>
+                          )}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {/* Brand */}
+            {availableBrands.length > 0 && (
+              <div className="space-y-1">
+                <Label className="text-sm text-muted-foreground">Brand</Label>
+                <Select value={filters.brand} onValueChange={(value) => handleFilterChange("brand", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="All Brands" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Brands</SelectItem>
+                    {availableBrands.map((brand) => (
+                      <SelectItem key={brand} value={brand}>
+                        <div className="flex items-center justify-between w-full">
+                          <span>{brand}</span>
+                          {filterCounts.brands?.[brand] && (
+                            <Badge variant="secondary" className="ml-2 text-xs">
+                              {filterCounts.brands[brand]}
+                            </Badge>
+                          )}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
+            {/* Color */}
+            {availableColors.length > 0 && (
+              <div className="space-y-1">
+                <Label className="text-sm text-muted-foreground flex items-center gap-2">
+                  <FaPalette className="h-3 w-3" />
+                  Color
+                </Label>
+                <Select value={filters.color} onValueChange={(value) => handleFilterChange("color", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="All Colors" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Colors</SelectItem>
+                    {availableColors.map((color) => (
+                      <SelectItem key={color} value={color}>
+                        <div className="flex items-center justify-between w-full">
+                          <div className="flex items-center space-x-2">
+                            <div
+                              className="w-4 h-4 rounded-full border border-gray-300"
+                              style={{
+                                backgroundColor:
+                                  color.toLowerCase() === "multi"
+                                    ? "linear-gradient(45deg, red, blue, green)"
+                                    : color.toLowerCase() === "wood"
+                                      ? "#8B4513"
+                                      : color.toLowerCase() === "rose gold"
+                                        ? "#E8B4B8"
+                                        : color.toLowerCase() === "tan"
+                                          ? "#D2B48C"
+                                          : color.toLowerCase(),
+                              }}
+                            />
+                            <span>{color}</span>
+                          </div>
+                          {filterCounts.colors?.[color] && (
+                            <Badge variant="secondary" className="ml-2 text-xs">
+                              {filterCounts.colors[color]}
+                            </Badge>
+                          )}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          </div>
 
           <div className="space-y-2">
             <Label>Price Range</Label>

@@ -52,7 +52,7 @@ export function PaymentModal({
 }: PaymentModalProps) {
   const { items, clearCart, validateStock } = useCart()
   const { user } = useAuth()
-  const [step, setStep] = useState<"review" | "delivery" | "payment" | "success">("review")
+  const [step, setStep] = useState<"review" | "delivery" | "payment" | "preview" | "success">("review")
   const [isProcessing, setIsProcessing] = useState(false)
   const [receiptNumber, setReceiptNumber] = useState("")
   const [purchasedItems, setPurchasedItems] = useState<typeof items>([])
@@ -1020,15 +1020,169 @@ Thank you for shopping with E-Apparels!
                       Back
                     </Button>
                     <Button
-                      onClick={processPayment}
-                      disabled={isProcessing || !isPaymentValid() || isCartEmpty || stockValidationError !== null}
+                      onClick={() => setStep("preview")}
+                      disabled={!isPaymentValid() || isCartEmpty || stockValidationError !== null}
                       className="flex-1"
                     >
-                      {isProcessing ? "Processing..." : "Confirm Payment"}
+                      Review Payment
                     </Button>
                   </div>
                 </>
               )}
+            </div>
+          </>
+        ) : step === "preview" ? (
+          <>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <FaCheckCircle className="h-5 w-5" />
+                Review Your Payment
+              </DialogTitle>
+            </DialogHeader>
+
+            <div className="space-y-4">
+              <Alert>
+                <FaLock className="h-4 w-4" />
+                <AlertDescription>
+                  Please review all details below before confirming your payment.
+                </AlertDescription>
+              </Alert>
+
+              {/* Order Summary */}
+              <Card>
+                <CardContent className="p-4">
+                  <h3 className="font-semibold mb-3 flex items-center gap-2">
+                    <FaShoppingCart className="h-4 w-4" />
+                    Order Summary
+                  </h3>
+                  <div className="space-y-2 max-h-[120px] overflow-y-auto">
+                    {items.map((item) => (
+                      <div key={item.id} className="flex justify-between items-center text-sm">
+                        <div className="flex items-center gap-2">
+                          <div className="relative h-8 w-8 rounded overflow-hidden flex-shrink-0">
+                            <Image
+                              src={item.product.image || "/placeholder.svg"}
+                              alt={item.product.name}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          <span className="truncate max-w-[150px]">{item.product.name} x{item.quantity}</span>
+                        </div>
+                        <span className="font-medium">${(item.product.price * item.quantity).toFixed(2)}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <Separator className="my-3" />
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span>Subtotal</span>
+                      <span>${subtotal.toFixed(2)}</span>
+                    </div>
+                    {appliedDiscounts.map((discount) => (
+                      <div key={discount.discountId} className="flex justify-between text-green-600">
+                        <span className="flex items-center gap-1">
+                          <FaTag className="h-3 w-3" />
+                          {discount.discountCode}
+                        </span>
+                        <span>-${discount.discountAmount.toFixed(2)}</span>
+                      </div>
+                    ))}
+                    <div className="flex justify-between">
+                      <span>Shipping ({shippingMethod?.name})</span>
+                      <span>{shippingCost === 0 ? "FREE" : `$${shippingCost.toFixed(2)}`}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Tax (13%)</span>
+                      <span>${tax.toFixed(2)}</span>
+                    </div>
+                    <Separator className="my-2" />
+                    <div className="flex justify-between font-bold text-base">
+                      <span>Total</span>
+                      <span className="text-primary">${total.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Delivery Information */}
+              <Card>
+                <CardContent className="p-4">
+                  <h3 className="font-semibold mb-3 flex items-center gap-2">
+                    <FaTruck className="h-4 w-4" />
+                    Delivery Address
+                  </h3>
+                  <div className="text-sm space-y-1">
+                    <p className="font-medium">{deliveryData.fullName}</p>
+                    <p className="text-muted-foreground">{deliveryData.phone}</p>
+                    <p className="text-muted-foreground">{deliveryData.street}</p>
+                    <p className="text-muted-foreground">
+                      {deliveryData.city}, {deliveryData.state} {deliveryData.zipCode}
+                    </p>
+                    <p className="text-muted-foreground">{deliveryData.country}</p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Payment Information */}
+              <Card>
+                <CardContent className="p-4">
+                  <h3 className="font-semibold mb-3 flex items-center gap-2">
+                    <FaCreditCard className="h-4 w-4" />
+                    Payment Method
+                  </h3>
+                  <div className="text-sm space-y-1">
+                    {paymentMode === "saved" && selectedPaymentMethodId ? (
+                      <>
+                        {(() => {
+                          const selectedMethod = savedPaymentMethods.find((m) => m.id === selectedPaymentMethodId)
+                          return selectedMethod ? (
+                            <>
+                              <p className="font-medium">{selectedMethod.brand} ending in {selectedMethod.last4}</p>
+                              <p className="text-muted-foreground">{selectedMethod.cardholderName}</p>
+                              <p className="text-muted-foreground">
+                                Expires {selectedMethod.expiryMonth?.toString().padStart(2, "0")}/{selectedMethod.expiryYear}
+                              </p>
+                            </>
+                          ) : null
+                        })()}
+                      </>
+                    ) : (
+                      <>
+                        <p className="font-medium">Card ending in {paymentData.cardNumber.slice(-4)}</p>
+                        <p className="text-muted-foreground">{paymentData.cardholderName}</p>
+                        <p className="text-muted-foreground">Expires {paymentData.expiryDate}</p>
+                      </>
+                    )}
+                    {paymentData.billingAddress && (
+                      <div className="mt-2 pt-2 border-t">
+                        <p className="text-xs text-muted-foreground">Billing Address:</p>
+                        <p className="text-muted-foreground">
+                          {paymentData.billingAddress}, {paymentData.city} {paymentData.zipCode}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <FaLock className="h-4 w-4" />
+                Your payment information is secure and encrypted
+              </div>
+
+              <div className="flex gap-2">
+                <Button variant="outline" onClick={() => setStep("payment")} className="flex-1 bg-transparent">
+                  Edit Payment
+                </Button>
+                <Button
+                  onClick={processPayment}
+                  disabled={isProcessing || isCartEmpty}
+                  className="flex-1"
+                >
+                  {isProcessing ? "Processing..." : "Confirm & Pay"}
+                </Button>
+              </div>
             </div>
           </>
         ) : (
