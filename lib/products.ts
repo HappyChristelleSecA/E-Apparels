@@ -671,6 +671,11 @@ export const getFilterCounts = (baseProducts: Product[] = getVisibleProducts()) 
     if (product.rating >= 2) counts.ratings["2+"]++
     if (product.rating >= 1) counts.ratings["1+"]++
 
+    // Gender counts
+    if (product.gender) {
+      counts.genders[product.gender] = (counts.genders[product.gender] || 0) + 1
+    }
+
     // Stock and sale counts
     if (product.inStock) counts.inStock++
     if (product.originalPrice && product.originalPrice > product.price) counts.onSale++
@@ -690,6 +695,7 @@ export const filterProducts = (
     minRating?: number
     outOfOrder?: boolean
     color?: string
+    gender?: string
   },
 ): Product[] => {
   return products.filter((product) => {
@@ -705,6 +711,9 @@ export const filterProducts = (
       const hasColor = product.colors ? product.colors.includes(filters.color) : product.color === filters.color
       if (!hasColor) return false
     }
+
+    // Gender filtering logic
+    if (filters.gender && product.gender !== filters.gender) return false
 
     return true
   })

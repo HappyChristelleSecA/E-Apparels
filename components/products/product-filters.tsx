@@ -21,6 +21,7 @@ interface ProductFiltersProps {
     minRating?: number
     onSale?: boolean
     color?: string
+    gender?: string
   }) => void
   onSearchChange: (query: string) => void
   totalProducts?: number
@@ -42,6 +43,7 @@ export function ProductFilters({
     minRating: "any",
     onSale: false,
     color: "all",
+    gender: "all",
   })
   const [searchQuery, setSearchQuery] = useState("")
   const [filterCounts, setFilterCounts] = useState<any>({})
@@ -64,6 +66,7 @@ export function ProductFilters({
     if (newFilters.minRating !== "any") processedFilters.minRating = Number.parseFloat(newFilters.minRating)
     if (newFilters.onSale) processedFilters.onSale = newFilters.onSale
     if (newFilters.color !== "all") processedFilters.color = newFilters.color
+    if (newFilters.gender !== "all") processedFilters.gender = newFilters.gender
 
     onFiltersChange(processedFilters)
   }
@@ -82,6 +85,7 @@ export function ProductFilters({
       minRating: "any",
       onSale: false,
       color: "all",
+      gender: "all",
     }
     setFilters(clearedFilters)
     setSearchQuery("")
@@ -100,6 +104,7 @@ export function ProductFilters({
   ).length
 
   const availableColors = Object.keys(filterCounts.colors || {}).sort()
+  const availableGenders = Object.keys(filterCounts.genders || {}).sort()
 
   const availableCategories =
     filteredProducts.length > 0 ? [...new Set(filteredProducts.map((p) => p.category).filter(Boolean))] : []
@@ -170,6 +175,33 @@ export function ProductFilters({
               </SelectContent>
             </Select>
           </div>
+
+          {/* Gender Filter */}
+          {availableGenders.length > 0 && (
+            <div className="space-y-2">
+              <Label>Gender</Label>
+              <Select value={filters.gender} onValueChange={(value) => handleFilterChange("gender", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All Genders" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Genders</SelectItem>
+                  {availableGenders.map((gender) => (
+                    <SelectItem key={gender} value={gender}>
+                      <div className="flex items-center justify-between w-full">
+                        <span>{gender}</span>
+                        {filterCounts.genders?.[gender] && (
+                          <Badge variant="secondary" className="ml-2 text-xs">
+                            {filterCounts.genders[gender]}
+                          </Badge>
+                        )}
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
           {availableColors.length > 0 && (
             <div className="space-y-2">
