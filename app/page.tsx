@@ -86,18 +86,19 @@ export default function HomePage() {
             </div>
             <div className="flex-1 hidden lg:flex justify-center">
               <div className="grid grid-cols-2 gap-4 max-w-sm">
-                <div className="bg-primary-foreground/10 rounded-2xl h-48 flex items-center justify-center border border-primary-foreground/10">
-                  <FaShoppingBag className="h-16 w-16 text-primary-foreground/30" />
-                </div>
-                <div className="bg-primary-foreground/10 rounded-2xl h-48 mt-8 flex items-center justify-center border border-primary-foreground/10">
-                  <FaStar className="h-16 w-16 text-primary-foreground/30" />
-                </div>
-                <div className="bg-primary-foreground/10 rounded-2xl h-48 -mt-8 flex items-center justify-center border border-primary-foreground/10">
-                  <FaTruck className="h-16 w-16 text-primary-foreground/30" />
-                </div>
-                <div className="bg-primary-foreground/10 rounded-2xl h-48 flex items-center justify-center border border-primary-foreground/10">
-                  <FaShieldAlt className="h-16 w-16 text-primary-foreground/30" />
-                </div>
+                {[
+                  { src: "/images/products/fm/blazer.png", alt: "Tailored wool blazer", extra: "" },
+                  { src: "/images/products/fm/gold-necklace.png", alt: "Gold pendant necklace", extra: "mt-8" },
+                  { src: "/images/products/fm/sneakers.png", alt: "Retro running sneakers", extra: "-mt-8" },
+                  { src: "/images/products/fm/crossbody-bag.png", alt: "Leather crossbody bag", extra: "" },
+                ].map((item) => (
+                  <div
+                    key={item.src}
+                    className={`bg-primary-foreground/10 rounded-2xl h-48 overflow-hidden border border-accent/30 ${item.extra}`}
+                  >
+                    <img src={item.src || "/placeholder.svg"} alt={item.alt} className="w-full h-full object-cover" />
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -169,7 +170,7 @@ export default function HomePage() {
       {/* Features Section */}
       <section className="py-20 bg-secondary/30">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-4">Why Choose E-Apparels?</h2>
+          <h2 className="text-3xl font-bold text-center mb-4">Why Choose Fits Merchant?</h2>
           <p className="text-muted-foreground text-center mb-12 max-w-lg mx-auto">
             We deliver an experience, not just products.
           </p>

@@ -38,8 +38,8 @@ const getEmailConfig = (): EmailConfig => {
       return {
         provider: "resend",
         apiKey: resendApiKey,
-        fromEmail: process.env.FROM_EMAIL || "noreply@e-apparels.com",
-        fromName: process.env.FROM_NAME || "E-Apparels",
+        fromEmail: process.env.FROM_EMAIL || "noreply@fitsmerchant.com",
+        fromName: process.env.FROM_NAME || "Fits Merchant",
       }
     }
 
@@ -47,8 +47,8 @@ const getEmailConfig = (): EmailConfig => {
       return {
         provider: "sendgrid",
         apiKey: sendgridApiKey,
-        fromEmail: process.env.FROM_EMAIL || "noreply@e-apparels.com",
-        fromName: process.env.FROM_NAME || "E-Apparels",
+        fromEmail: process.env.FROM_EMAIL || "noreply@fitsmerchant.com",
+        fromName: process.env.FROM_NAME || "Fits Merchant",
       }
     }
 
@@ -59,8 +59,8 @@ const getEmailConfig = (): EmailConfig => {
         smtpPort: Number.parseInt(process.env.SMTP_PORT || "587"),
         smtpUser,
         smtpPass,
-        fromEmail: process.env.FROM_EMAIL || "noreply@e-apparels.com",
-        fromName: process.env.FROM_NAME || "E-Apparels",
+        fromEmail: process.env.FROM_EMAIL || "noreply@fitsmerchant.com",
+        fromName: process.env.FROM_NAME || "Fits Merchant",
       }
     }
   }
@@ -69,24 +69,24 @@ const getEmailConfig = (): EmailConfig => {
   // Fallback to demo mode
   return {
     provider: "demo",
-    fromEmail: "noreply@e-apparels.com",
-    fromName: "E-Apparels",
+    fromEmail: "noreply@fitsmerchant.com",
+    fromName: "Fits Merchant",
   }
 }
 
 // Email templates
 export const emailTemplates = {
   emailVerification: (verificationUrl: string, userName: string): EmailTemplate => ({
-    subject: "Verify Your Email Address - E-Apparels",
+    subject: "Verify Your Email Address - Fits Merchant",
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center;">
-          <h1 style="color: white; margin: 0; font-size: 28px;">Welcome to E-Apparels!</h1>
+          <h1 style="color: white; margin: 0; font-size: 28px;">Welcome to Fits Merchant!</h1>
         </div>
         <div style="padding: 40px 20px; background: #f8f9fa;">
           <h2 style="color: #333; margin-bottom: 20px;">Hi ${userName},</h2>
           <p style="color: #666; font-size: 16px; line-height: 1.6;">
-            Thank you for signing up for E-Apparels! To complete your registration and start shopping, 
+            Thank you for signing up for Fits Merchant! To complete your registration and start shopping, 
             please verify your email address by clicking the button below.
           </p>
           <div style="text-align: center; margin: 30px 0;">
@@ -105,17 +105,17 @@ export const emailTemplates = {
           </p>
         </div>
         <div style="background: #333; color: #999; padding: 20px; text-align: center; font-size: 12px;">
-          <p>© 2025 E-Apparels. All rights reserved.</p>
+          <p>© 2025 Fits Merchant. All rights reserved.</p>
           <p>If you didn't create an account, please ignore this email.</p>
         </div>
       </div>
     `,
     text: `
-      Welcome to E-Apparels!
+      Welcome to Fits Merchant!
       
       Hi ${userName},
       
-      Thank you for signing up for E-Apparels! To complete your registration and start shopping, 
+      Thank you for signing up for Fits Merchant! To complete your registration and start shopping, 
       please verify your email address by visiting this link:
       
       ${verificationUrl}
@@ -124,12 +124,12 @@ export const emailTemplates = {
       
       If you didn't create an account, please ignore this email.
       
-      © 2025 E-Apparels. All rights reserved.
+      © 2025 Fits Merchant. All rights reserved.
     `,
   }),
 
   passwordReset: (resetUrl: string, userName: string): EmailTemplate => ({
-    subject: "Reset Your Password - E-Apparels",
+    subject: "Reset Your Password - Fits Merchant",
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center;">
@@ -138,7 +138,7 @@ export const emailTemplates = {
         <div style="padding: 40px 20px; background: #f8f9fa;">
           <h2 style="color: #333; margin-bottom: 20px;">Hi ${userName},</h2>
           <p style="color: #666; font-size: 16px; line-height: 1.6;">
-            We received a request to reset your password for your E-Apparels account. 
+            We received a request to reset your password for your Fits Merchant account. 
             Click the button below to create a new password.
           </p>
           <div style="text-align: center; margin: 30px 0;">
@@ -160,16 +160,16 @@ export const emailTemplates = {
           </p>
         </div>
         <div style="background: #333; color: #999; padding: 20px; text-align: center; font-size: 12px;">
-          <p>© 2025 E-Apparels. All rights reserved.</p>
+          <p>© 2025 Fits Merchant. All rights reserved.</p>
         </div>
       </div>
     `,
     text: `
-      Password Reset - E-Apparels
+      Password Reset - Fits Merchant
       
       Hi ${userName},
       
-      We received a request to reset your password for your E-Apparels account. 
+      We received a request to reset your password for your Fits Merchant account. 
       Visit this link to create a new password:
       
       ${resetUrl}
@@ -178,7 +178,7 @@ export const emailTemplates = {
       
       If you didn't request a password reset, please ignore this email. Your password will remain unchanged.
       
-      © 2025 E-Apparels. All rights reserved.
+      © 2025 Fits Merchant. All rights reserved.
     `,
   }),
 
@@ -190,7 +190,7 @@ export const emailTemplates = {
     shippingAddress: string
     trackingUrl?: string
   }): EmailTemplate => ({
-    subject: `Order Confirmation #${orderDetails.orderId} - E-Apparels`,
+    subject: `Order Confirmation #${orderDetails.orderId} - Fits Merchant`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center;">
@@ -241,12 +241,12 @@ export const emailTemplates = {
           </p>
         </div>
         <div style="background: #333; color: #999; padding: 20px; text-align: center; font-size: 12px;">
-          <p>© 2025 E-Apparels. All rights reserved.</p>
+          <p>© 2025 Fits Merchant. All rights reserved.</p>
         </div>
       </div>
     `,
     text: `
-      Order Confirmed! - E-Apparels
+      Order Confirmed! - Fits Merchant
       
       Hi ${orderDetails.userName},
       
@@ -266,7 +266,7 @@ export const emailTemplates = {
       
       We'll send you another email when your order ships. If you have any questions, please contact our support team.
       
-      © 2025 E-Apparels. All rights reserved.
+      © 2025 Fits Merchant. All rights reserved.
     `,
   }),
 
@@ -277,7 +277,7 @@ export const emailTemplates = {
     items: Array<{ name: string; quantity: number }>
     returnUrl?: string
   }): EmailTemplate => ({
-    subject: `Return Request Received #${returnDetails.orderId} - E-Apparels`,
+    subject: `Return Request Received #${returnDetails.orderId} - Fits Merchant`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 20px; text-align: center;">
@@ -333,12 +333,12 @@ export const emailTemplates = {
           </p>
         </div>
         <div style="background: #333; color: #999; padding: 20px; text-align: center; font-size: 12px;">
-          <p>© 2025 E-Apparels. All rights reserved.</p>
+          <p>© 2025 Fits Merchant. All rights reserved.</p>
         </div>
       </div>
     `,
     text: `
-      Return Request Received - E-Apparels
+      Return Request Received - Fits Merchant
       
       Hi ${returnDetails.userName},
       
@@ -362,7 +362,7 @@ export const emailTemplates = {
       
       If you have any questions about your return, please contact our support team.
       
-      © 2025 E-Apparels. All rights reserved.
+      © 2025 Fits Merchant. All rights reserved.
     `,
   }),
 }

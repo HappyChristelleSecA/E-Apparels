@@ -81,7 +81,7 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
             </svg>
           </div>
           <CardTitle className="text-2xl font-bold">Account Created Successfully!</CardTitle>
-          <CardDescription>Welcome to E-Apparels! Your account has been created for {registeredEmail}</CardDescription>
+          <CardDescription>Welcome to Fits Merchant! Your account has been created for {registeredEmail}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4 text-center">
@@ -99,7 +99,7 @@ export function RegisterForm({ onToggleMode }: RegisterFormProps) {
     <Card className="w-full max-w-md">
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
-        <CardDescription>Join E-Apparels today</CardDescription>
+        <CardDescription>Join Fits Merchant today</CardDescription>
       </CardHeader>
       <CardContent>
         {showAccountExistsPopup && (

@@ -22,7 +22,7 @@ export interface AuthState {
 const mockUsers: User[] = [
   {
     id: "1",
-    email: "admin@e-apparels.com",
+    email: "admin@fitsmerchant.com",
     name: "Admin User",
     role: "admin",
     createdAt: new Date("2024-01-01"),

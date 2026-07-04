@@ -393,7 +393,7 @@ Total: $${receiptData.total}
 Payment Method: ${receiptData.paymentMethod}
 Status: ${receiptData.status}
 
-Thank you for shopping with E-Apparels!
+Thank you for shopping with Fits Merchant!
 ================
     `
 
@@ -401,7 +401,7 @@ Thank you for shopping with E-Apparels!
     const url = window.URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
-    a.download = `E-Apparels-Receipt-${receiptNumber}.txt`
+    a.download = `Fits Merchant-Receipt-${receiptNumber}.txt`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
@@ -450,7 +450,7 @@ Thank you for shopping with E-Apparels!
       <!DOCTYPE html>
       <html>
         <head>
-          <title>E-Apparels Receipt - ${receiptNumber}</title>
+          <title>Fits Merchant Receipt - ${receiptNumber}</title>
           <style>
             body { font-family: monospace; max-width: 400px; margin: 0 auto; padding: 20px; }
             .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
@@ -512,7 +512,7 @@ Thank you for shopping with E-Apparels!
           <div class="footer">
             <p>Payment Method: **** **** **** ${cardLast4}</p>
             <p>Status: PAID</p>
-            <p>Thank you for shopping with E-Apparels!</p>
+            <p>Thank you for shopping with Fits Merchant!</p>
           </div>
         </body>
       </html>
