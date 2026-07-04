@@ -56,17 +56,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [cartState.items, isLoaded, user?.id])
 
-  useEffect(() => {
-    if (!user && isLoaded) {
-      setCartState((prev) => ({
-        ...prev,
-        items: [],
-        total: 0,
-        itemCount: 0,
-      }))
-    }
-  }, [user, isLoaded])
-
   const addToCart = (product: Product, quantity = 1) => {
     setCartState((prev) => {
       const newItems = addToCartUtil(prev.items, product, quantity)

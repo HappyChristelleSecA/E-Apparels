@@ -177,7 +177,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
         </head>
         <body>
           <div class="header">
-            <div class="company-name">E-Apparels</div>
+            <div class="company-name">Fits Merchant</div>
             <div class="invoice-title">INVOICE</div>
           </div>
           
@@ -244,7 +244,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
           
           <div class="footer">
             <p>Thank you for your business!</p>
-            <p>For questions about this invoice, please contact support@e-apparels.com</p>
+            <p>For questions about this invoice, please contact support@fitsmerchant.com</p>
           </div>
         </body>
       </html>
@@ -297,7 +297,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
         </head>
         <body>
           <div class="header">
-            <div class="company-name">E-Apparels</div>
+            <div class="company-name">Fits Merchant</div>
             <div class="order-title">ORDER DETAILS</div>
           </div>
           

@@ -9,13 +9,13 @@ export function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <span className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground text-sm font-bold">
-                EA
+              <span className="w-8 h-8 rounded-md bg-primary flex items-center justify-center text-primary-foreground text-sm font-bold border-2 border-accent">
+                FM
               </span>
-              <h3 className="text-lg font-semibold">E-Apparels</h3>
+              <h3 className="text-lg font-semibold">Fits Merchant</h3>
             </div>
             <p className="text-sm opacity-70">
-              Your trusted e-commerce platform for quality apparel at great prices.
+              Curated fashion and lifestyle — clothing, shoes, jewelry, and accessories, all in one place.
             </p>
             <div className="flex space-x-4">
               <Link
@@ -113,7 +113,7 @@ export function Footer() {
               </div>
               <div className="flex items-center space-x-2">
                 <FaEnvelope className="h-4 w-4 opacity-60" />
-                <span className="opacity-70">support@e-apparels.com</span>
+                <span className="opacity-70">support@fitsmerchant.com</span>
               </div>
             </div>
           </div>
@@ -121,7 +121,7 @@ export function Footer() {
 
         <div className="border-t border-background/10 mt-8 pt-8 text-center text-sm opacity-60">
           <p>
-            &copy; 2026 E-Apparels. All rights reserved. |
+            &copy; 2026 Fits Merchant. All rights reserved. |
             <Link href="/privacy" className="hover:opacity-100 ml-1 underline-offset-4 hover:underline">
               Privacy Policy
             </Link>{" "}

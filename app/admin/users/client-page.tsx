@@ -68,7 +68,7 @@ export default function AdminUsersPageClient() {
             {
               id: "1",
               name: "Admin User",
-              email: "admin@e-apparels.com",
+              email: "admin@fitsmerchant.com",
               role: "admin",
               joinDate: new Date("2024-01-01"),
               totalOrders: 0,
@@ -197,7 +197,7 @@ export default function AdminUsersPageClient() {
             {
               id: "1",
               name: "Admin User",
-              email: "admin@e-apparels.com",
+              email: "admin@fitsmerchant.com",
               role: "admin",
               joinDate: new Date("2024-01-01"),
               totalOrders: 0,

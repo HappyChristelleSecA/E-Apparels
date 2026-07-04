@@ -4,87 +4,87 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.97 0.008 70); /* Warm cream / parchment */
-  --foreground: oklch(0.25 0.03 45); /* Deep espresso brown */
-  --card: oklch(0.98 0.006 75); /* Warm white card */
-  --card-foreground: oklch(0.25 0.03 45);
-  --popover: oklch(0.98 0.006 75);
-  --popover-foreground: oklch(0.25 0.03 45);
+  --background: oklch(0.98 0.012 95); /* Warm cream */
+  --foreground: oklch(0.24 0.03 160); /* Deep forest ink */
+  --card: oklch(0.995 0.008 95); /* Soft ivory card */
+  --card-foreground: oklch(0.24 0.03 160);
+  --popover: oklch(0.995 0.008 95);
+  --popover-foreground: oklch(0.24 0.03 160);
 
-  /* Terracotta primary */
-  --primary: oklch(0.55 0.15 35); /* Rich terracotta */
-  --primary-foreground: oklch(0.97 0.006 70);
+  /* Deep emerald primary */
+  --primary: oklch(0.48 0.12 162); /* Rich emerald green */
+  --primary-foreground: oklch(0.98 0.012 95);
 
-  /* Sandy beige secondary */
-  --secondary: oklch(0.92 0.015 75); /* Warm sand */
-  --secondary-foreground: oklch(0.3 0.03 45);
+  /* Warm light secondary */
+  --secondary: oklch(0.94 0.018 95); /* Soft sand */
+  --secondary-foreground: oklch(0.3 0.03 160);
 
-  --muted: oklch(0.93 0.012 70); /* Light sandstone */
-  --muted-foreground: oklch(0.5 0.025 50);
-  --accent: oklch(0.6 0.1 155); /* Sage green accent */
-  --accent-foreground: oklch(0.97 0.006 70);
-  --destructive: oklch(0.5 0.2 25);
-  --destructive-foreground: oklch(0.97 0 0);
-  --border: oklch(0.88 0.015 70); /* Warm sandy border */
-  --input: oklch(0.98 0.006 75);
-  --ring: oklch(0.55 0.15 35 / 0.35);
+  --muted: oklch(0.95 0.014 95); /* Light cream */
+  --muted-foreground: oklch(0.5 0.02 155);
+  --accent: oklch(0.72 0.09 75); /* Soft brass accent */
+  --accent-foreground: oklch(0.24 0.04 70);
+  --destructive: oklch(0.55 0.2 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.9 0.014 95); /* Warm border */
+  --input: oklch(0.995 0.008 95);
+  --ring: oklch(0.48 0.12 162 / 0.35);
 
-  /* Bohemian chart palette */
-  --chart-1: oklch(0.55 0.15 35); /* Terracotta */
-  --chart-2: oklch(0.6 0.1 155); /* Sage green */
-  --chart-3: oklch(0.62 0.1 55); /* Burnt sienna */
-  --chart-4: oklch(0.65 0.08 340); /* Dusty rose */
-  --chart-5: oklch(0.7 0.08 85); /* Warm gold */
+  /* Emerald chart palette */
+  --chart-1: oklch(0.48 0.12 162); /* Emerald */
+  --chart-2: oklch(0.72 0.09 75); /* Brass */
+  --chart-3: oklch(0.6 0.1 190); /* Teal */
+  --chart-4: oklch(0.65 0.09 45); /* Warm clay */
+  --chart-5: oklch(0.58 0.11 135); /* Leaf green */
 
-  --radius: 0.625rem;
-  --sidebar: oklch(0.98 0.006 75);
-  --sidebar-foreground: oklch(0.25 0.03 45);
-  --sidebar-primary: oklch(0.93 0.012 70);
-  --sidebar-primary-foreground: oklch(0.25 0.03 45);
-  --sidebar-accent: oklch(0.55 0.15 35);
-  --sidebar-accent-foreground: oklch(0.97 0.006 70);
-  --sidebar-border: oklch(0.88 0.015 70);
-  --sidebar-ring: oklch(0.55 0.15 35 / 0.35);
+  --radius: 0.5rem;
+  --sidebar: oklch(0.995 0.008 95);
+  --sidebar-foreground: oklch(0.24 0.03 160);
+  --sidebar-primary: oklch(0.95 0.014 95);
+  --sidebar-primary-foreground: oklch(0.24 0.03 160);
+  --sidebar-accent: oklch(0.48 0.12 162);
+  --sidebar-accent-foreground: oklch(0.98 0.012 95);
+  --sidebar-border: oklch(0.9 0.014 95);
+  --sidebar-ring: oklch(0.48 0.12 162 / 0.35);
 }
 
 .dark {
-  --background: oklch(0.16 0.02 45); /* Deep warm brown */
-  --foreground: oklch(0.92 0.01 70); /* Warm cream text */
-  --card: oklch(0.2 0.02 45);
-  --card-foreground: oklch(0.92 0.01 70);
-  --popover: oklch(0.2 0.02 45);
-  --popover-foreground: oklch(0.92 0.01 70);
+  --background: oklch(0.18 0.02 160); /* Deep forest */
+  --foreground: oklch(0.94 0.012 95); /* Warm cream text */
+  --card: oklch(0.22 0.025 160);
+  --card-foreground: oklch(0.94 0.012 95);
+  --popover: oklch(0.22 0.025 160);
+  --popover-foreground: oklch(0.94 0.012 95);
 
-  --primary: oklch(0.65 0.14 35); /* Lighter terracotta */
-  --primary-foreground: oklch(0.15 0.02 45);
+  --primary: oklch(0.68 0.13 162); /* Lighter emerald */
+  --primary-foreground: oklch(0.16 0.02 160);
 
-  --secondary: oklch(0.28 0.02 50);
-  --secondary-foreground: oklch(0.92 0.01 70);
+  --secondary: oklch(0.3 0.025 160);
+  --secondary-foreground: oklch(0.94 0.012 95);
 
-  --muted: oklch(0.26 0.02 50);
-  --muted-foreground: oklch(0.62 0.015 65);
-  --accent: oklch(0.65 0.1 155); /* Sage green */
-  --accent-foreground: oklch(0.15 0.02 45);
+  --muted: oklch(0.28 0.02 160);
+  --muted-foreground: oklch(0.64 0.02 120);
+  --accent: oklch(0.75 0.09 75); /* Brass */
+  --accent-foreground: oklch(0.16 0.02 160);
   --destructive: oklch(0.6 0.2 25);
-  --destructive-foreground: oklch(0.15 0.02 45);
-  --border: oklch(0.3 0.02 50);
-  --input: oklch(0.26 0.02 50);
-  --ring: oklch(0.65 0.14 35 / 0.35);
+  --destructive-foreground: oklch(0.16 0.02 160);
+  --border: oklch(0.32 0.02 160);
+  --input: oklch(0.28 0.02 160);
+  --ring: oklch(0.68 0.13 162 / 0.35);
 
-  --chart-1: oklch(0.65 0.14 35);
-  --chart-2: oklch(0.65 0.1 155);
-  --chart-3: oklch(0.68 0.1 55);
-  --chart-4: oklch(0.7 0.08 340);
-  --chart-5: oklch(0.72 0.08 85);
+  --chart-1: oklch(0.68 0.13 162);
+  --chart-2: oklch(0.75 0.09 75);
+  --chart-3: oklch(0.68 0.1 190);
+  --chart-4: oklch(0.7 0.09 45);
+  --chart-5: oklch(0.66 0.11 135);
 
-  --sidebar: oklch(0.2 0.02 45);
-  --sidebar-foreground: oklch(0.92 0.01 70);
-  --sidebar-primary: oklch(0.65 0.14 35);
-  --sidebar-primary-foreground: oklch(0.92 0.01 70);
-  --sidebar-accent: oklch(0.3 0.02 50);
-  --sidebar-accent-foreground: oklch(0.92 0.01 70);
-  --sidebar-border: oklch(0.3 0.02 50);
-  --sidebar-ring: oklch(0.65 0.14 35 / 0.35);
+  --sidebar: oklch(0.22 0.025 160);
+  --sidebar-foreground: oklch(0.94 0.012 95);
+  --sidebar-primary: oklch(0.68 0.13 162);
+  --sidebar-primary-foreground: oklch(0.94 0.012 95);
+  --sidebar-accent: oklch(0.32 0.02 160);
+  --sidebar-accent-foreground: oklch(0.94 0.012 95);
+  --sidebar-border: oklch(0.32 0.02 160);
+  --sidebar-ring: oklch(0.68 0.13 162 / 0.35);
 }
 
 @theme inline {
@@ -125,8 +125,9 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-heading: var(--font-playfair);
-  --font-body: var(--font-nunito);
+  --font-heading: var(--font-montserrat);
+  --font-body: var(--font-inter);
+  --font-sans: var(--font-inter);
 }
 
 @layer base {

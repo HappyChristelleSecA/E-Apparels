@@ -1,27 +1,27 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Playfair_Display, Nunito } from "next/font/google"
+import { Montserrat, Inter } from "next/font/google"
 import { CartProvider } from "@/hooks/use-cart"
 import { WishlistProvider } from "@/hooks/use-wishlist"
 import { Footer } from "@/components/layout/footer"
 import { ErrorBoundary } from "@/components/error-boundary"
 import "./globals.css"
 
-const playfair = Playfair_Display({
+const montserrat = Montserrat({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-playfair",
+  variable: "--font-montserrat",
 })
 
-const nunito = Nunito({
+const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-nunito",
+  variable: "--font-inter",
 })
 
 export const metadata: Metadata = {
-  title: "E-Apparels - Modern E-Commerce",
-  description: "Your trusted online shopping destination",
+  title: "Fits Merchant - Fashion & Lifestyle E-Commerce",
+  description: "Discover curated clothing, shoes, jewelry, and accessories at Fits Merchant.",
     generator: 'v0.app'
 }
 
@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${playfair.variable} ${nunito.variable} antialiased`}>
+    <html lang="en" className={`${montserrat.variable} ${inter.variable} antialiased bg-background`}>
       <body className="font-sans">
         <ErrorBoundary>
           <CartProvider>

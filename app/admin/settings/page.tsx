@@ -16,9 +16,9 @@ import { redirect } from "next/navigation"
 export default function AdminSettingsPage() {
   const { user, isAuthenticated } = useAuth()
   const [storeSettings, setStoreSettings] = useState({
-    storeName: "E-Apparels",
+    storeName: "Fits Merchant",
     storeDescription: "Your trusted online shopping destination",
-    storeEmail: "support@e-apparels.com",
+    storeEmail: "support@fitsmerchant.com",
     storePhone: "(555) 123-4567",
     currency: "USD",
     taxRate: "8",

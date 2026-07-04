@@ -104,7 +104,7 @@ export function ProductFilters({
   const quickFilters = [
     { label: "On Sale", icon: FaTag, action: () => handleFilterChange("onSale", !filters.onSale) },
     { label: "Top Rated", icon: FaStar, action: () => handleFilterChange("minRating", "4") },
-    { label: "Popular", icon: FaFire, action: () => handleFilterChange("category", "Electronics") },
+    { label: "Popular", icon: FaFire, action: () => handleFilterChange("category", "Clothing") },
   ]
 
   const activeFiltersCount = Object.values(filters).filter(
