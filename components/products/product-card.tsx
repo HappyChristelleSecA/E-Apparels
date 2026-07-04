@@ -15,6 +15,26 @@ interface ProductCardProps {
   highlightTerm?: string
 }
 
+function StarRating({ rating, reviewCount }: { rating: number; reviewCount?: number }) {
+  return (
+    <div className="flex items-center" aria-label={`Rated ${rating} out of 5`}>
+      {[...Array(5)].map((_, i) => {
+        const fill = Math.max(0, Math.min(1, rating - i)) * 100
+        return (
+          <span key={i} className="relative inline-block h-4 w-4">
+            <FaStar className="absolute inset-0 h-4 w-4 text-gray-300" />
+            <span className="absolute inset-0 overflow-hidden" style={{ width: `${fill}%` }}>
+              <FaStar className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+            </span>
+          </span>
+        )
+      })}
+      <span className="ml-1 text-sm text-muted-foreground">{rating.toFixed(1)}</span>
+      {reviewCount !== undefined && <span className="ml-1 text-sm text-muted-foreground">({reviewCount})</span>}
+    </div>
+  )
+}
+
 export function ProductCard({ product, viewMode = "grid", highlightTerm }: ProductCardProps) {
   const discountPercentage = product.originalPrice
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
@@ -74,17 +94,7 @@ export function ProductCard({ product, viewMode = "grid", highlightTerm }: Produ
                   </Link>
                   <p className="text-muted-foreground text-sm line-clamp-2 mt-1">{product.description}</p>
                   <div className="flex items-center mt-2 space-x-2">
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar
-                          key={i}
-                          className={`h-4 w-4 ${
-                            i < Math.floor(product.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                          }`}
-                        />
-                      ))}
-                      <span className="ml-1 text-sm text-muted-foreground">({product.reviewCount})</span>
-                    </div>
+                    <StarRating rating={product.rating} reviewCount={product.reviewCount} />
                     {stockDisplay()}
                   </div>
                 </div>
@@ -141,17 +151,7 @@ export function ProductCard({ product, viewMode = "grid", highlightTerm }: Produ
             />
           </Link>
           <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              {[...Array(5)].map((_, i) => (
-                <FaStar
-                  key={i}
-                  className={`h-4 w-4 ${
-                    i < Math.floor(product.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                  }`}
-                />
-              ))}
-              <span className="ml-1 text-sm text-muted-foreground">({product.reviewCount})</span>
-            </div>
+            <StarRating rating={product.rating} reviewCount={product.reviewCount} />
             {stockDisplay()}
           </div>
           <div className="flex items-center justify-between">
